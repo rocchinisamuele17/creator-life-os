@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useApp } from "../../context/AppContext";
-import type { ContentStatus } from "../../types";
+import type { ContentItem, ContentStatus } from "../../types";
+import { FormField, SelectField, AddButton } from "../../components/ui/FormField";
 
 const STATUS_COLORS: Record<ContentStatus, string> = {
   Idea: "#6366f1",
@@ -9,6 +10,16 @@ const STATUS_COLORS: Record<ContentStatus, string> = {
   Pubblicato: "#3b82f6",
   Analisi: "#8b5cf6",
 };
+
+const PLATFORMS = [
+  "Instagram Reel",
+  "Instagram Carousel",
+  "TikTok",
+  "YouTube Short",
+  "YouTube Video",
+];
+
+const STATUSES: ContentStatus[] = ["Idea", "Script", "Pronto", "Pubblicato", "Analisi"];
 
 const HOOK_BANK = [
   "Nessuno te lo dirà mai",
@@ -21,14 +32,56 @@ const HOOK_BANK = [
 type Filter = "Tutti" | ContentStatus;
 const FILTERS: Filter[] = ["Tutti", "Idea", "Script", "Pronto", "Pubblicato"];
 
+const emptyForm = {
+  title: "",
+  platform: PLATFORMS[0],
+  status: "Idea" as ContentStatus,
+  hook: "",
+};
+
 export function ContentMachine() {
-  const { state } = useApp();
+  const { state, setState } = useApp();
   const [filter, setFilter] = useState<Filter>("Tutti");
+  const [showForm, setShowForm] = useState(false);
+  const [form, setForm] = useState(emptyForm);
 
   const filtered =
     filter === "Tutti"
       ? state.content
       : state.content.filter((c) => c.status === filter);
+
+  const addContent = () => {
+    if (!form.title.trim()) return;
+    const now = new Date();
+    const dateStr = `${String(now.getDate()).padStart(2, "0")} ${["Gen", "Feb", "Mar", "Apr", "Mag", "Giu", "Lug", "Ago", "Set", "Ott", "Nov", "Dic"][now.getMonth()]}`;
+    const newItem: ContentItem = {
+      id: Date.now(),
+      title: form.title.trim(),
+      platform: form.platform,
+      status: form.status,
+      hook: form.hook.trim() || "—",
+      date: dateStr,
+      views: "—",
+      engagement: "—",
+    };
+    setState((s) => ({ ...s, content: [...s.content, newItem] }));
+    setForm(emptyForm);
+    setShowForm(false);
+  };
+
+  const updateStatus = (id: number, status: ContentStatus) => {
+    setState((s) => ({
+      ...s,
+      content: s.content.map((c) => (c.id === id ? { ...c, status } : c)),
+    }));
+  };
+
+  const deleteContent = (id: number) => {
+    setState((s) => ({
+      ...s,
+      content: s.content.filter((c) => c.id !== id),
+    }));
+  };
 
   return (
     <div>
@@ -45,28 +98,88 @@ export function ContentMachine() {
         <h2 style={{ fontSize: 20, fontWeight: 700, color: "#fff", margin: 0 }}>
           🎬 Content Machine
         </h2>
-        <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-          {FILTERS.map((s) => (
-            <button
-              key={s}
-              onClick={() => setFilter(s)}
-              style={{
-                padding: "5px 12px",
-                borderRadius: 20,
-                border: "none",
-                background:
-                  filter === s ? "#6366f1" : "rgba(255,255,255,0.06)",
-                color: filter === s ? "#fff" : "rgba(255,255,255,0.5)",
-                fontSize: 12,
-                cursor: "pointer",
-                fontWeight: 500,
-              }}
-            >
-              {s}
-            </button>
-          ))}
+        <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+          <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+            {FILTERS.map((s) => (
+              <button
+                key={s}
+                onClick={() => setFilter(s)}
+                style={{
+                  padding: "5px 12px",
+                  borderRadius: 20,
+                  border: "none",
+                  background:
+                    filter === s ? "#6366f1" : "rgba(255,255,255,0.06)",
+                  color: filter === s ? "#fff" : "rgba(255,255,255,0.5)",
+                  fontSize: 12,
+                  cursor: "pointer",
+                  fontWeight: 500,
+                }}
+              >
+                {s}
+              </button>
+            ))}
+          </div>
+          <AddButton onClick={() => setShowForm(!showForm)} label="Nuovo" />
         </div>
       </div>
+
+      {showForm && (
+        <div
+          style={{
+            background: "rgba(249,115,22,0.06)",
+            border: "1px solid rgba(249,115,22,0.2)",
+            borderRadius: 12,
+            padding: 16,
+            marginBottom: 16,
+          }}
+        >
+          <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 10 }}>
+            <FormField
+              label="Titolo"
+              value={form.title}
+              onChange={(e) => setForm({ ...form, title: e.target.value })}
+              placeholder="Il mio prossimo contenuto..."
+            />
+            <SelectField
+              label="Piattaforma"
+              value={form.platform}
+              onChange={(v) => setForm({ ...form, platform: v })}
+              options={PLATFORMS}
+            />
+          </div>
+          <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 12 }}>
+            <SelectField
+              label="Status"
+              value={form.status}
+              onChange={(v) => setForm({ ...form, status: v as ContentStatus })}
+              options={STATUSES}
+            />
+            <FormField
+              label="Hook"
+              value={form.hook}
+              onChange={(e) => setForm({ ...form, hook: e.target.value })}
+              placeholder="La frase che cattura..."
+            />
+          </div>
+          <button
+            onClick={addContent}
+            style={{
+              padding: "8px 20px",
+              borderRadius: 8,
+              border: "none",
+              background: "#f97316",
+              color: "#fff",
+              fontSize: 13,
+              fontWeight: 600,
+              cursor: "pointer",
+              fontFamily: "inherit",
+            }}
+          >
+            Aggiungi Contenuto
+          </button>
+        </div>
+      )}
 
       <div
         style={{
@@ -152,18 +265,43 @@ export function ContentMachine() {
                   {c.platform} · {c.date}
                 </div>
               </div>
-              <span
-                style={{
-                  padding: "3px 10px",
-                  borderRadius: 12,
-                  fontSize: 11,
-                  fontWeight: 600,
-                  background: `${STATUS_COLORS[c.status]}22`,
-                  color: STATUS_COLORS[c.status],
-                }}
-              >
-                {c.status}
-              </span>
+              <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                <select
+                  value={c.status}
+                  onChange={(e) => updateStatus(c.id, e.target.value as ContentStatus)}
+                  style={{
+                    padding: "3px 8px",
+                    borderRadius: 12,
+                    fontSize: 11,
+                    fontWeight: 600,
+                    background: `${STATUS_COLORS[c.status]}22`,
+                    color: STATUS_COLORS[c.status],
+                    border: "none",
+                    cursor: "pointer",
+                    fontFamily: "inherit",
+                  }}
+                >
+                  {STATUSES.map((s) => (
+                    <option key={s} value={s} style={{ background: "#1a1a1b" }}>
+                      {s}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  onClick={() => deleteContent(c.id)}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    color: "rgba(255,255,255,0.25)",
+                    cursor: "pointer",
+                    fontSize: 14,
+                    padding: "2px 4px",
+                  }}
+                  title="Elimina"
+                >
+                  ×
+                </button>
+              </div>
             </div>
             {c.hook !== "—" && (
               <div

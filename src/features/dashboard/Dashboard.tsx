@@ -1,8 +1,9 @@
+import { useState } from "react";
 import { useApp } from "../../context/AppContext";
 import { StatCard } from "../../components/ui/StatCard";
 import { ProgressBar } from "../../components/ui/ProgressBar";
 
-const NEXT_ACTIONS = [
+const INITIAL_ACTIONS = [
   "Finire script: 'Come ho perso 3 clienti'",
   "Registrare Reel metodo 3-3-3",
   "Rispondere a Skillshare (proposta)",
@@ -11,7 +12,8 @@ const NEXT_ACTIONS = [
 ];
 
 export function Dashboard() {
-  const { state } = useApp();
+  const { state, setState } = useApp();
+  const [checkedActions, setCheckedActions] = useState<Set<number>>(new Set());
 
   const totalEntrate = state.entrate.reduce((s, e) => s + e.amount, 0);
   const totalSpese = state.spese.reduce((s, e) => s + e.amount, 0);
@@ -23,6 +25,22 @@ export function Dashboard() {
     0
   );
   const activeBrands = state.brands.filter((b) => b.status === "Attivo").length;
+
+  const toggleAction = (idx: number) => {
+    setCheckedActions((prev) => {
+      const next = new Set(prev);
+      if (next.has(idx)) next.delete(idx);
+      else next.add(idx);
+      return next;
+    });
+  };
+
+  const updateGoalProgress = (idx: number, progress: number) => {
+    setState((s) => ({
+      ...s,
+      goals: s.goals.map((g, i) => (i === idx ? { ...g, progress } : g)),
+    }));
+  };
 
   return (
     <div>
@@ -94,7 +112,7 @@ export function Dashboard() {
         >
           🎯 Obiettivi Q2 2026
         </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
           {state.goals.map((g, i) => (
             <div key={i}>
               <div
@@ -114,6 +132,21 @@ export function Dashboard() {
                 </span>
               </div>
               <ProgressBar value={g.progress} />
+              <input
+                type="range"
+                min={0}
+                max={100}
+                value={g.progress}
+                onChange={(e) => updateGoalProgress(i, parseInt(e.target.value))}
+                style={{
+                  width: "100%",
+                  marginTop: 4,
+                  height: 4,
+                  accentColor: "#f97316",
+                  cursor: "pointer",
+                  opacity: 0.6,
+                }}
+              />
             </div>
           ))}
         </div>
@@ -137,35 +170,59 @@ export function Dashboard() {
         >
           ⚡ Prossime Azioni
         </div>
-        {NEXT_ACTIONS.map((action, i) => (
-          <div
-            key={i}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 10,
-              padding: "8px 0",
-              borderBottom:
-                i < NEXT_ACTIONS.length - 1
-                  ? "1px solid rgba(255,255,255,0.05)"
-                  : "none",
-            }}
-          >
+        {INITIAL_ACTIONS.map((action, i) => {
+          const checked = checkedActions.has(i);
+          return (
             <div
+              key={i}
+              onClick={() => toggleAction(i)}
               style={{
-                width: 18,
-                height: 18,
-                borderRadius: 4,
-                border: "2px solid rgba(255,255,255,0.2)",
-                flexShrink: 0,
+                display: "flex",
+                alignItems: "center",
+                gap: 10,
+                padding: "8px 0",
+                borderBottom:
+                  i < INITIAL_ACTIONS.length - 1
+                    ? "1px solid rgba(255,255,255,0.05)"
+                    : "none",
                 cursor: "pointer",
               }}
-            />
-            <span style={{ fontSize: 13, color: "rgba(255,255,255,0.7)" }}>
-              {action}
-            </span>
-          </div>
-        ))}
+            >
+              <div
+                style={{
+                  width: 18,
+                  height: 18,
+                  borderRadius: 4,
+                  border: checked
+                    ? "2px solid #f97316"
+                    : "2px solid rgba(255,255,255,0.2)",
+                  background: checked ? "#f9731622" : "transparent",
+                  flexShrink: 0,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: 11,
+                  color: checked ? "#f97316" : "transparent",
+                  transition: "all 0.15s ease",
+                }}
+              >
+                ✓
+              </div>
+              <span
+                style={{
+                  fontSize: 13,
+                  color: checked
+                    ? "rgba(255,255,255,0.3)"
+                    : "rgba(255,255,255,0.7)",
+                  textDecoration: checked ? "line-through" : "none",
+                  transition: "all 0.15s ease",
+                }}
+              >
+                {action}
+              </span>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

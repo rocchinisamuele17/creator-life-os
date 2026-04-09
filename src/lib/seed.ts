@@ -42,4 +42,10 @@ export const SEED_STATE: AppState = {
     { goal: "5 brand deal chiusi", progress: 60 },
     { goal: "30 Reel pubblicati", progress: 40 },
   ],
+  journal: [],
+  reminders: [
+    { id: 1, text: "Pubblicare Reel giornaliero", time: "09:00", enabled: true },
+    { id: 2, text: "Check analytics", time: "18:00", enabled: true },
+    { id: 3, text: "Review settimanale", time: "18:00", enabled: false },
+  ],
 };

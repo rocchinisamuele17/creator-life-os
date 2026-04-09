@@ -53,6 +53,20 @@ export interface Goal {
   progress: number;
 }
 
+export interface JournalEntry {
+  date: string;
+  gratitude: string;
+  focus: string;
+  reflection: string;
+}
+
+export interface Reminder {
+  id: number;
+  text: string;
+  time: string;
+  enabled: boolean;
+}
+
 export interface AppState {
   content: ContentItem[];
   entrate: MoneyEntry[];
@@ -60,4 +74,6 @@ export interface AppState {
   habits: Habit[];
   brands: BrandDeal[];
   goals: Goal[];
+  journal: JournalEntry[];
+  reminders: Reminder[];
 }

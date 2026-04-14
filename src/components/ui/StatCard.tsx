@@ -9,38 +9,72 @@ export function StatCard({ label, value, sub, accent }: StatCardProps) {
   return (
     <div
       style={{
-        background: "rgba(255,255,255,0.04)",
-        border: "1px solid rgba(255,255,255,0.08)",
-        borderRadius: 12,
-        padding: "16px 18px",
+        background: "var(--bg-card)",
+        border: "1px solid var(--border-subtle)",
+        borderRadius: "var(--radius-md)",
+        padding: "18px 20px",
         flex: 1,
-        minWidth: 130,
+        minWidth: 140,
+        backdropFilter: "blur(12px)",
+        boxShadow: "var(--shadow-card)",
+        transition: "border-color 0.3s ease, transform 0.3s ease",
+        position: "relative",
+        overflow: "hidden",
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.borderColor = accent || "var(--accent)";
+        e.currentTarget.style.transform = "translateY(-2px)";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.borderColor = "var(--border-subtle)";
+        e.currentTarget.style.transform = "translateY(0)";
       }}
     >
+      {/* Subtle accent glow at top */}
       <div
         style={{
-          fontSize: 11,
-          color: "rgba(255,255,255,0.45)",
+          position: "absolute",
+          top: 0,
+          left: "20%",
+          right: "20%",
+          height: 1,
+          background: `linear-gradient(90deg, transparent, ${accent || "var(--accent)"}, transparent)`,
+          opacity: 0.4,
+        }}
+      />
+      <div
+        style={{
+          fontFamily: "var(--font-body)",
+          fontSize: 10,
+          fontWeight: 600,
+          color: "var(--text-muted)",
           textTransform: "uppercase",
-          letterSpacing: 1,
-          marginBottom: 6,
+          letterSpacing: 1.5,
+          marginBottom: 8,
         }}
       >
         {label}
       </div>
       <div
         style={{
-          fontSize: 26,
-          fontWeight: 700,
-          color: accent || "#fff",
-          lineHeight: 1.1,
+          fontFamily: "var(--font-display)",
+          fontSize: 28,
+          fontWeight: 800,
+          color: accent || "var(--text-primary)",
+          lineHeight: 1,
+          letterSpacing: -0.5,
         }}
       >
         {value}
       </div>
       {sub && (
         <div
-          style={{ fontSize: 12, color: "rgba(255,255,255,0.4)", marginTop: 4 }}
+          style={{
+            fontSize: 11,
+            color: "var(--text-muted)",
+            marginTop: 6,
+            fontWeight: 400,
+          }}
         >
           {sub}
         </div>

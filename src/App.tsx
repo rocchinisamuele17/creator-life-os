@@ -22,30 +22,49 @@ export default function App() {
   const { state } = useApp();
   const [activeTab, setActiveTab] = useState<TabId>("dashboard");
 
-  // Start reminder scheduler
   useEffect(() => {
     requestNotificationPermission();
     startReminderScheduler(() => state.reminders ?? []);
     return () => stopReminderScheduler();
   }, [state.reminders]);
 
-  // If Supabase is configured, require auth
   if (isConfigured && loading) {
     return (
       <div
         style={{
           minHeight: "100vh",
-          background: "#0a0a0b",
+          background: "var(--bg-deep)",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          color: "#fff",
-          fontFamily: "'DM Sans', sans-serif",
+          color: "var(--text-primary)",
+          fontFamily: "var(--font-body)",
         }}
       >
-        <div style={{ textAlign: "center" }}>
-          <div style={{ fontSize: 32, marginBottom: 12 }}>⚡</div>
-          <div style={{ fontSize: 14, color: "rgba(255,255,255,0.5)" }}>
+        <div style={{ textAlign: "center", animation: "fadeIn 0.6s ease" }}>
+          <div
+            style={{
+              width: 48,
+              height: 48,
+              borderRadius: 14,
+              background: "linear-gradient(135deg, var(--accent), #d4922f)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: 24,
+              margin: "0 auto 16px",
+              boxShadow: "0 4px 24px rgba(229, 166, 59, 0.3)",
+            }}
+          >
+            ⚡
+          </div>
+          <div
+            style={{
+              fontSize: 13,
+              color: "var(--text-muted)",
+              fontWeight: 400,
+            }}
+          >
             Caricamento...
           </div>
         </div>
@@ -73,11 +92,25 @@ export default function App() {
   };
 
   return (
-    <div style={{ minHeight: "100vh", background: "#0a0a0b", color: "#fff" }}>
+    <div
+      style={{
+        minHeight: "100vh",
+        background: "var(--bg-deep)",
+        color: "var(--text-primary)",
+        position: "relative",
+        zIndex: 1,
+      }}
+    >
+      {/* Top bar */}
       <div
         style={{
-          padding: "20px 20px 0",
-          borderBottom: "1px solid rgba(255,255,255,0.06)",
+          padding: "22px 24px 0",
+          borderBottom: "1px solid var(--border-subtle)",
+          backdropFilter: "blur(16px)",
+          position: "sticky",
+          top: 0,
+          zIndex: 100,
+          background: "rgba(8, 11, 20, 0.85)",
         }}
       >
         <div
@@ -85,6 +118,8 @@ export default function App() {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "flex-start",
+            maxWidth: 720,
+            margin: "0 auto",
           }}
         >
           <Header />
@@ -94,14 +129,14 @@ export default function App() {
                 display: "flex",
                 alignItems: "center",
                 gap: 10,
-                marginTop: 4,
+                marginTop: 6,
               }}
             >
               <span
                 style={{
                   fontSize: 11,
-                  color: "rgba(255,255,255,0.35)",
-                  maxWidth: 140,
+                  color: "var(--text-muted)",
+                  maxWidth: 130,
                   overflow: "hidden",
                   textOverflow: "ellipsis",
                   whiteSpace: "nowrap",
@@ -112,14 +147,18 @@ export default function App() {
               <button
                 onClick={signOut}
                 style={{
-                  padding: "4px 10px",
-                  borderRadius: 6,
-                  border: "1px solid rgba(255,255,255,0.12)",
+                  padding: "5px 12px",
+                  borderRadius: "var(--radius-full)",
+                  border: "1px solid var(--border-medium)",
                   background: "none",
-                  color: "rgba(255,255,255,0.5)",
-                  fontSize: 11,
+                  color: "var(--text-secondary)",
+                  fontSize: 10,
+                  fontWeight: 500,
                   cursor: "pointer",
-                  fontFamily: "inherit",
+                  fontFamily: "var(--font-body)",
+                  letterSpacing: 0.5,
+                  textTransform: "uppercase",
+                  transition: "all 0.2s ease",
                 }}
               >
                 Esci
@@ -127,10 +166,21 @@ export default function App() {
             </div>
           )}
         </div>
-        <TabNav active={activeTab} onChange={setActiveTab} />
+        <div style={{ maxWidth: 720, margin: "0 auto" }}>
+          <TabNav active={activeTab} onChange={setActiveTab} />
+        </div>
       </div>
 
-      <div style={{ padding: 20, maxWidth: 680, margin: "0 auto" }}>
+      {/* Content */}
+      <div
+        style={{
+          padding: "28px 24px",
+          maxWidth: 720,
+          margin: "0 auto",
+          animation: "fadeInUp 0.4s ease",
+        }}
+        key={activeTab}
+      >
         {renderContent()}
       </div>
 

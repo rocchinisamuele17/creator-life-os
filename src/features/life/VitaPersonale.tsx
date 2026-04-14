@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useApp } from "../../context/AppContext";
+import { Card, sectionTitle, pageTitle } from "../../components/ui/Card";
 import { FormField, AddButton } from "../../components/ui/FormField";
 import type { JournalEntry } from "../../types";
 
@@ -28,46 +29,23 @@ export function VitaPersonale() {
   const [newHabit, setNewHabit] = useState("");
 
   const todayKey = getTodayKey();
-  const todayJournal = state.journal.find((j) => j.date === todayKey) || {
-    date: todayKey,
-    gratitude: "",
-    focus: "",
-    reflection: "",
-  };
+  const todayJournal = state.journal.find((j) => j.date === todayKey) || { date: todayKey, gratitude: "", focus: "", reflection: "" };
 
   const updateJournal = (field: keyof JournalEntry, value: string) => {
     setState((s) => {
       const exists = s.journal.some((j) => j.date === todayKey);
       const updated: JournalEntry = { ...todayJournal, [field]: value };
-      return {
-        ...s,
-        journal: exists
-          ? s.journal.map((j) => (j.date === todayKey ? updated : j))
-          : [...s.journal, updated],
-      };
+      return { ...s, journal: exists ? s.journal.map((j) => (j.date === todayKey ? updated : j)) : [...s.journal, updated] };
     });
   };
 
   const toggleHabit = (habitIdx: number, dayIdx: number) => {
-    setState((s) => ({
-      ...s,
-      habits: s.habits.map((h, i) =>
-        i === habitIdx
-          ? { ...h, days: h.days.map((d, j) => (j === dayIdx ? !d : d)) }
-          : h
-      ),
-    }));
+    setState((s) => ({ ...s, habits: s.habits.map((h, i) => i === habitIdx ? { ...h, days: h.days.map((d, j) => (j === dayIdx ? !d : d)) } : h) }));
   };
 
   const addHabit = () => {
     if (!newHabit.trim()) return;
-    setState((s) => ({
-      ...s,
-      habits: [
-        ...s.habits,
-        { name: newHabit.trim(), days: [false, false, false, false, false, false, false] },
-      ],
-    }));
+    setState((s) => ({ ...s, habits: [...s.habits, { name: newHabit.trim(), days: [false, false, false, false, false, false, false] }] }));
     setNewHabit("");
     setShowAdd(false);
   };
@@ -78,73 +56,39 @@ export function VitaPersonale() {
 
   const textareaStyle = {
     width: "100%",
-    background: "rgba(255,255,255,0.04)",
-    border: "1px solid rgba(255,255,255,0.08)",
-    borderRadius: 8,
-    padding: "10px 12px",
-    fontSize: 12,
-    color: "#fff",
-    minHeight: 50,
+    background: "rgba(255,255,255,0.03)",
+    border: "1px solid var(--border-medium)",
+    borderRadius: "var(--radius-sm)",
+    padding: "12px 14px",
+    fontSize: 13,
+    color: "var(--text-primary)",
+    minHeight: 56,
     resize: "vertical" as const,
-    fontFamily: "inherit",
+    fontFamily: "var(--font-body)",
     outline: "none",
     boxSizing: "border-box" as const,
+    lineHeight: 1.5,
+    transition: "border-color 0.2s ease",
   };
 
   return (
-    <div>
-      <h2 style={{ fontSize: 20, fontWeight: 700, color: "#fff", margin: "0 0 20px" }}>
-        🧘 Vita Personale
-      </h2>
+    <div className="stagger-in">
+      <h2 style={pageTitle}>Vita Personale</h2>
 
       {/* Habit Tracker */}
-      <div
-        style={{
-          background: "rgba(255,255,255,0.04)",
-          border: "1px solid rgba(255,255,255,0.08)",
-          borderRadius: 12,
-          padding: 18,
-          marginBottom: 16,
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: 14,
-          }}
-        >
-          <div style={{ fontSize: 13, fontWeight: 600, color: "rgba(255,255,255,0.7)" }}>
-            Habit Tracker — Settimana Corrente
-          </div>
+      <Card style={{ marginBottom: 18 }} glow="var(--accent)">
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
+          <div style={sectionTitle}>Habit Tracker — Settimana</div>
           <AddButton onClick={() => setShowAdd(!showAdd)} label="Abitudine" />
         </div>
 
         {showAdd && (
-          <div style={{ display: "flex", gap: 8, marginBottom: 12, flexWrap: "wrap" }}>
-            <FormField
-              label="Nuova Abitudine"
-              value={newHabit}
-              onChange={(e) => setNewHabit(e.target.value)}
-              placeholder="Es. Stretching 5min"
-              onKeyDown={(e) => e.key === "Enter" && addHabit()}
-            />
+          <div style={{ display: "flex", gap: 8, marginBottom: 14, flexWrap: "wrap" }}>
+            <FormField label="Nuova Abitudine" value={newHabit} onChange={(e) => setNewHabit(e.target.value)}
+              placeholder="Es. Stretching 5min" onKeyDown={(e) => e.key === "Enter" && addHabit()} />
             <div style={{ display: "flex", alignItems: "flex-end" }}>
-              <button
-                onClick={addHabit}
-                style={{
-                  padding: "8px 16px",
-                  borderRadius: 8,
-                  border: "none",
-                  background: "#f97316",
-                  color: "#fff",
-                  fontSize: 12,
-                  fontWeight: 600,
-                  cursor: "pointer",
-                  fontFamily: "inherit",
-                }}
-              >
+              <button onClick={addHabit}
+                style={{ padding: "10px 18px", borderRadius: "var(--radius-sm)", border: "none", background: "var(--accent)", color: "#080b14", fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "var(--font-body)" }}>
                 Aggiungi
               </button>
             </div>
@@ -155,239 +99,95 @@ export function VitaPersonale() {
           <table style={{ width: "100%", borderCollapse: "collapse" }}>
             <thead>
               <tr>
-                <th
-                  style={{
-                    textAlign: "left",
-                    padding: "6px 8px",
-                    fontSize: 11,
-                    color: "rgba(255,255,255,0.35)",
-                    fontWeight: 500,
-                  }}
-                >
-                  Abitudine
-                </th>
+                <th style={{ textAlign: "left", padding: "6px 8px", fontSize: 10, color: "var(--text-muted)", fontWeight: 600, letterSpacing: 0.8, textTransform: "uppercase" }}>Abitudine</th>
                 {DAY_LABELS.map((d, i) => (
-                  <th
-                    key={i}
-                    style={{
-                      padding: "6px 8px",
-                      fontSize: 11,
-                      color: "rgba(255,255,255,0.35)",
-                      fontWeight: 500,
-                      textAlign: "center",
-                      minWidth: 28,
-                    }}
-                  >
-                    {d}
-                  </th>
+                  <th key={i} style={{ padding: "6px 6px", fontSize: 10, color: "var(--text-muted)", fontWeight: 600, textAlign: "center", minWidth: 30 }}>{d}</th>
                 ))}
-                <th style={{ width: 28 }} />
+                <th style={{ width: 24 }} />
               </tr>
             </thead>
             <tbody>
               {state.habits.map((h, i) => (
                 <tr key={i}>
-                  <td
-                    style={{
-                      padding: "8px 8px",
-                      fontSize: 12,
-                      color: "rgba(255,255,255,0.6)",
-                    }}
-                  >
-                    {h.name}
-                  </td>
+                  <td style={{ padding: "9px 8px", fontSize: 12, color: "var(--text-secondary)", fontWeight: 400 }}>{h.name}</td>
                   {h.days.map((done, j) => (
                     <td key={j} style={{ textAlign: "center", padding: "8px 4px" }}>
-                      <div
-                        onClick={() => toggleHabit(i, j)}
+                      <div onClick={() => toggleHabit(i, j)}
                         style={{
-                          width: 22,
-                          height: 22,
-                          borderRadius: 6,
-                          margin: "0 auto",
-                          background: done ? "#f9731622" : "rgba(255,255,255,0.04)",
-                          border: done
-                            ? "1.5px solid #f97316"
-                            : "1.5px solid rgba(255,255,255,0.1)",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          fontSize: 12,
-                          color: done ? "#f97316" : "transparent",
-                          cursor: "pointer",
-                          transition: "all 0.15s ease",
-                        }}
-                      >
-                        ✓
-                      </div>
+                          width: 24, height: 24, borderRadius: 6, margin: "0 auto",
+                          background: done ? "var(--accent-muted)" : "var(--bg-surface)",
+                          border: done ? "1.5px solid var(--accent)" : "1.5px solid var(--border-medium)",
+                          display: "flex", alignItems: "center", justifyContent: "center",
+                          fontSize: 11, color: done ? "var(--accent)" : "transparent",
+                          cursor: "pointer", transition: "all 0.15s ease",
+                        }}>✓</div>
                     </td>
                   ))}
                   <td style={{ textAlign: "center" }}>
-                    <button
-                      onClick={() => deleteHabit(i)}
-                      style={{
-                        background: "none",
-                        border: "none",
-                        color: "rgba(255,255,255,0.2)",
-                        cursor: "pointer",
-                        fontSize: 14,
-                        padding: "2px 4px",
-                      }}
-                    >
-                      ×
-                    </button>
+                    <button onClick={() => deleteHabit(i)}
+                      style={{ background: "none", border: "none", color: "var(--text-ghost)", cursor: "pointer", fontSize: 14, padding: "2px" }}>×</button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-      </div>
+      </Card>
 
-      {/* Journal Editabile */}
-      <div
-        style={{
-          background: "rgba(255,255,255,0.04)",
-          border: "1px solid rgba(255,255,255,0.08)",
-          borderRadius: 12,
-          padding: 18,
-          marginBottom: 16,
-        }}
-      >
-        <div
-          style={{
-            fontSize: 13,
-            fontWeight: 600,
-            color: "rgba(255,255,255,0.7)",
-            marginBottom: 12,
-          }}
-        >
-          📓 Journal di Oggi — {new Date().toLocaleDateString("it-IT", { weekday: "long", day: "numeric", month: "long" })}
+      {/* Journal */}
+      <Card style={{ marginBottom: 18 }} glow="var(--info)">
+        <div style={sectionTitle}>
+          📓 Journal — {new Date().toLocaleDateString("it-IT", { weekday: "long", day: "numeric", month: "long" })}
         </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          <div>
-            <div style={{ fontSize: 12, color: "rgba(255,255,255,0.5)", marginBottom: 4 }}>
-              🙏 Gratitudine
+        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+          {[
+            { key: "gratitude" as const, label: "🙏 Gratitudine", ph: "3 cose per cui sono grato oggi..." },
+            { key: "focus" as const, label: "🎯 Focus del Giorno", ph: "La cosa più importante da fare oggi è..." },
+            { key: "reflection" as const, label: "🌙 Riflessione Serale", ph: "Cosa ho imparato oggi..." },
+          ].map((j) => (
+            <div key={j.key}>
+              <div style={{ fontSize: 11, color: "var(--text-muted)", marginBottom: 5, fontWeight: 500 }}>{j.label}</div>
+              <textarea value={todayJournal[j.key]} onChange={(e) => updateJournal(j.key, e.target.value)}
+                placeholder={j.ph} style={textareaStyle}
+                onFocus={(e) => { e.currentTarget.style.borderColor = "var(--accent)"; }}
+                onBlur={(e) => { e.currentTarget.style.borderColor = "var(--border-medium)"; }}
+              />
             </div>
-            <textarea
-              value={todayJournal.gratitude}
-              onChange={(e) => updateJournal("gratitude", e.target.value)}
-              placeholder="3 cose per cui sono grato oggi..."
-              style={textareaStyle}
-            />
-          </div>
-          <div>
-            <div style={{ fontSize: 12, color: "rgba(255,255,255,0.5)", marginBottom: 4 }}>
-              🎯 Focus del Giorno
-            </div>
-            <textarea
-              value={todayJournal.focus}
-              onChange={(e) => updateJournal("focus", e.target.value)}
-              placeholder="La cosa più importante da fare oggi è..."
-              style={textareaStyle}
-            />
-          </div>
-          <div>
-            <div style={{ fontSize: 12, color: "rgba(255,255,255,0.5)", marginBottom: 4 }}>
-              🌙 Riflessione Serale
-            </div>
-            <textarea
-              value={todayJournal.reflection}
-              onChange={(e) => updateJournal("reflection", e.target.value)}
-              placeholder="Cosa ho imparato oggi..."
-              style={textareaStyle}
-            />
-          </div>
+          ))}
         </div>
 
         {state.journal.length > 1 && (
-          <div style={{ marginTop: 14, borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: 12 }}>
-            <div style={{ fontSize: 11, color: "rgba(255,255,255,0.35)", marginBottom: 8 }}>
-              JOURNAL PRECEDENTI ({state.journal.length - (state.journal.some((j) => j.date === todayKey) ? 1 : 0)})
+          <div style={{ marginTop: 16, borderTop: "1px solid var(--border-subtle)", paddingTop: 14 }}>
+            <div style={{ fontSize: 10, color: "var(--text-muted)", marginBottom: 10, fontWeight: 600, textTransform: "uppercase", letterSpacing: 1 }}>
+              Journal Precedenti
             </div>
-            {state.journal
-              .filter((j) => j.date !== todayKey)
-              .sort((a, b) => b.date.localeCompare(a.date))
-              .slice(0, 5)
-              .map((j) => (
-                <div
-                  key={j.date}
-                  style={{
-                    padding: "8px 0",
-                    borderBottom: "1px solid rgba(255,255,255,0.04)",
-                  }}
-                >
-                  <div style={{ fontSize: 11, fontWeight: 600, color: "#f97316", marginBottom: 4 }}>
-                    {new Date(j.date).toLocaleDateString("it-IT", { weekday: "short", day: "numeric", month: "short" })}
-                  </div>
-                  {j.gratitude && (
-                    <div style={{ fontSize: 11, color: "rgba(255,255,255,0.5)", marginBottom: 2 }}>
-                      🙏 {j.gratitude}
-                    </div>
-                  )}
-                  {j.focus && (
-                    <div style={{ fontSize: 11, color: "rgba(255,255,255,0.5)", marginBottom: 2 }}>
-                      🎯 {j.focus}
-                    </div>
-                  )}
-                  {j.reflection && (
-                    <div style={{ fontSize: 11, color: "rgba(255,255,255,0.5)" }}>
-                      🌙 {j.reflection}
-                    </div>
-                  )}
+            {state.journal.filter((j) => j.date !== todayKey).sort((a, b) => b.date.localeCompare(a.date)).slice(0, 5).map((j) => (
+              <div key={j.date} style={{ padding: "8px 0", borderBottom: "1px solid var(--border-subtle)" }}>
+                <div style={{ fontSize: 11, fontWeight: 700, color: "var(--accent)", marginBottom: 4, fontFamily: "var(--font-display)" }}>
+                  {new Date(j.date).toLocaleDateString("it-IT", { weekday: "short", day: "numeric", month: "short" })}
                 </div>
-              ))}
+                {j.gratitude && <div style={{ fontSize: 11, color: "var(--text-muted)", marginBottom: 2 }}>🙏 {j.gratitude}</div>}
+                {j.focus && <div style={{ fontSize: 11, color: "var(--text-muted)", marginBottom: 2 }}>🎯 {j.focus}</div>}
+                {j.reflection && <div style={{ fontSize: 11, color: "var(--text-muted)" }}>🌙 {j.reflection}</div>}
+              </div>
+            ))}
           </div>
         )}
-      </div>
+      </Card>
 
       {/* Routine */}
-      <div
-        style={{
-          background: "rgba(255,255,255,0.04)",
-          border: "1px solid rgba(255,255,255,0.08)",
-          borderRadius: 12,
-          padding: 18,
-        }}
-      >
-        <div
-          style={{
-            fontSize: 13,
-            fontWeight: 600,
-            color: "rgba(255,255,255,0.7)",
-            marginBottom: 12,
-          }}
-        >
-          ⏰ Routine Giornaliera
-        </div>
+      <Card>
+        <div style={sectionTitle}>⏰ Routine Giornaliera</div>
         {ROUTINE.map((r, i) => (
-          <div
-            key={i}
-            style={{
-              display: "flex",
-              gap: 12,
-              padding: "7px 0",
-              borderBottom:
-                i < ROUTINE.length - 1 ? "1px solid rgba(255,255,255,0.04)" : "none",
-            }}
-          >
-            <span
-              style={{
-                fontSize: 12,
-                fontWeight: 600,
-                color: "#f97316",
-                minWidth: 42,
-                fontVariantNumeric: "tabular-nums",
-              }}
-            >
-              {r.time}
-            </span>
-            <span style={{ fontSize: 12, color: "rgba(255,255,255,0.6)" }}>
-              {r.task}
-            </span>
+          <div key={i} style={{
+            display: "flex", gap: 14, padding: "8px 0",
+            borderBottom: i < ROUTINE.length - 1 ? "1px solid var(--border-subtle)" : "none",
+          }}>
+            <span style={{ fontSize: 12, fontWeight: 700, color: "var(--accent)", minWidth: 44, fontVariantNumeric: "tabular-nums", fontFamily: "var(--font-display)" }}>{r.time}</span>
+            <span style={{ fontSize: 12, color: "var(--text-secondary)", fontWeight: 400 }}>{r.task}</span>
           </div>
         ))}
-      </div>
+      </Card>
     </div>
   );
 }

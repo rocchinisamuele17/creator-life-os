@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
+import { Card } from "../../components/ui/Card";
 
 export function LoginPage() {
   const { signIn, signUp } = useAuth();
@@ -31,238 +32,252 @@ export function LoginPage() {
     setLoading(false);
   };
 
+  const labelStyle: React.CSSProperties = {
+    fontFamily: "var(--font-display)",
+    fontSize: 10,
+    fontWeight: 700,
+    color: "var(--text-muted)",
+    textTransform: "uppercase",
+    letterSpacing: 1.5,
+    display: "block",
+    marginBottom: 6,
+  };
+
+  const inputStyle: React.CSSProperties = {
+    width: "100%",
+    padding: "12px 16px",
+    borderRadius: "var(--radius-sm)",
+    border: "1px solid var(--border-subtle)",
+    background: "var(--bg-surface)",
+    color: "var(--text-primary)",
+    fontSize: 14,
+    fontFamily: "var(--font-body)",
+    outline: "none",
+    boxSizing: "border-box",
+    transition: "border-color 0.2s, background 0.2s",
+  };
+
   return (
     <div
       style={{
         minHeight: "100vh",
-        background: "#0a0a0b",
+        background: "var(--bg-deep)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        fontFamily: "'DM Sans', -apple-system, sans-serif",
+        fontFamily: "var(--font-body)",
         padding: 20,
       }}
     >
       <div
-        style={{
-          width: "100%",
-          maxWidth: 380,
-          background: "rgba(255,255,255,0.04)",
-          border: "1px solid rgba(255,255,255,0.08)",
-          borderRadius: 16,
-          padding: 32,
-        }}
+        className="stagger-in"
+        style={{ width: "100%", maxWidth: 400 }}
       >
+        {/* Logo */}
         <div
           style={{
             display: "flex",
+            flexDirection: "column",
             alignItems: "center",
-            gap: 10,
-            marginBottom: 28,
-            justifyContent: "center",
+            gap: 6,
+            marginBottom: 32,
           }}
         >
           <div
             style={{
-              width: 36,
-              height: 36,
-              borderRadius: 8,
-              background: "linear-gradient(135deg, #f97316, #ea580c)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: 18,
+              fontFamily: "var(--font-display)",
+              fontSize: 28,
+              fontWeight: 900,
+              letterSpacing: -1,
+              background: "linear-gradient(135deg, var(--accent-light), var(--accent))",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              textShadow: "none",
+              filter: "drop-shadow(0 0 20px var(--accent-glow))",
             }}
           >
-            ⚡
+            Creator Life OS
           </div>
-          <div>
-            <div style={{ fontSize: 18, fontWeight: 700, color: "#fff" }}>
-              Creator Life OS
-            </div>
+          <div
+            style={{
+              fontFamily: "var(--font-display)",
+              fontSize: 9,
+              fontWeight: 700,
+              letterSpacing: 4,
+              textTransform: "uppercase",
+              color: "var(--text-muted)",
+            }}
+          >
+            PRODIGI DIGITALI
           </div>
         </div>
 
-        <h2
-          style={{
-            fontSize: 20,
-            fontWeight: 700,
-            color: "#fff",
-            margin: "0 0 6px",
-            textAlign: "center",
-          }}
-        >
-          {isSignUp ? "Crea Account" : "Accedi"}
-        </h2>
-        <p
-          style={{
-            fontSize: 13,
-            color: "rgba(255,255,255,0.4)",
-            textAlign: "center",
-            margin: "0 0 24px",
-          }}
-        >
-          {isSignUp
-            ? "Registrati per sincronizzare i tuoi dati"
-            : "I tuoi dati ti aspettano"}
-        </p>
-
-        <form onSubmit={handleSubmit}>
-          <div style={{ marginBottom: 14 }}>
-            <label
-              style={{
-                fontSize: 11,
-                color: "rgba(255,255,255,0.45)",
-                textTransform: "uppercase",
-                letterSpacing: 0.8,
-                display: "block",
-                marginBottom: 4,
-              }}
-            >
-              Email
-            </label>
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px 14px",
-                borderRadius: 8,
-                border: "1px solid rgba(255,255,255,0.12)",
-                background: "rgba(255,255,255,0.06)",
-                color: "#fff",
-                fontSize: 14,
-                fontFamily: "inherit",
-                outline: "none",
-                boxSizing: "border-box",
-              }}
-              placeholder="tu@email.com"
-            />
-          </div>
-
-          <div style={{ marginBottom: 20 }}>
-            <label
-              style={{
-                fontSize: 11,
-                color: "rgba(255,255,255,0.45)",
-                textTransform: "uppercase",
-                letterSpacing: 0.8,
-                display: "block",
-                marginBottom: 4,
-              }}
-            >
-              Password
-            </label>
-            <input
-              type="password"
-              required
-              minLength={6}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px 14px",
-                borderRadius: 8,
-                border: "1px solid rgba(255,255,255,0.12)",
-                background: "rgba(255,255,255,0.06)",
-                color: "#fff",
-                fontSize: 14,
-                fontFamily: "inherit",
-                outline: "none",
-                boxSizing: "border-box",
-              }}
-              placeholder="Min. 6 caratteri"
-            />
-          </div>
-
-          {error && (
-            <div
-              style={{
-                background: "rgba(239,68,68,0.1)",
-                border: "1px solid rgba(239,68,68,0.3)",
-                borderRadius: 8,
-                padding: "8px 12px",
-                marginBottom: 14,
-                fontSize: 12,
-                color: "#ef4444",
-              }}
-            >
-              {error}
-            </div>
-          )}
-
-          {success && (
-            <div
-              style={{
-                background: "rgba(16,185,129,0.1)",
-                border: "1px solid rgba(16,185,129,0.3)",
-                borderRadius: 8,
-                padding: "8px 12px",
-                marginBottom: 14,
-                fontSize: 12,
-                color: "#10b981",
-              }}
-            >
-              {success}
-            </div>
-          )}
-
-          <button
-            type="submit"
-            disabled={loading}
+        <Card glow="var(--accent)" style={{ padding: 32 }}>
+          <h2
             style={{
-              width: "100%",
-              padding: "12px",
-              borderRadius: 8,
-              border: "none",
-              background: loading
-                ? "rgba(249,115,22,0.5)"
-                : "linear-gradient(135deg, #f97316, #ea580c)",
-              color: "#fff",
-              fontSize: 14,
-              fontWeight: 600,
-              cursor: loading ? "default" : "pointer",
-              fontFamily: "inherit",
+              fontFamily: "var(--font-display)",
+              fontSize: 20,
+              fontWeight: 800,
+              color: "var(--text-primary)",
+              margin: "0 0 4px",
+              textAlign: "center",
+              letterSpacing: -0.3,
             }}
           >
-            {loading
-              ? "Caricamento..."
-              : isSignUp
-                ? "Crea Account"
-                : "Accedi"}
-          </button>
-        </form>
-
-        <div
-          style={{
-            textAlign: "center",
-            marginTop: 16,
-            fontSize: 13,
-            color: "rgba(255,255,255,0.4)",
-          }}
-        >
-          {isSignUp ? "Hai già un account?" : "Non hai un account?"}{" "}
-          <button
-            onClick={() => {
-              setIsSignUp(!isSignUp);
-              setError(null);
-              setSuccess(null);
-            }}
+            {isSignUp ? "Crea Account" : "Bentornato"}
+          </h2>
+          <p
             style={{
-              background: "none",
-              border: "none",
-              color: "#f97316",
-              cursor: "pointer",
               fontSize: 13,
-              fontFamily: "inherit",
-              textDecoration: "underline",
+              color: "var(--text-secondary)",
+              textAlign: "center",
+              margin: "0 0 28px",
             }}
           >
-            {isSignUp ? "Accedi" : "Registrati"}
-          </button>
-        </div>
+            {isSignUp
+              ? "Registrati per sincronizzare i tuoi dati"
+              : "I tuoi dati ti aspettano"}
+          </p>
+
+          <form onSubmit={handleSubmit}>
+            <div style={{ marginBottom: 18 }}>
+              <label style={labelStyle}>Email</label>
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                style={inputStyle}
+                placeholder="tu@email.com"
+                onFocus={(e) => {
+                  e.currentTarget.style.borderColor = "var(--accent)";
+                  e.currentTarget.style.background = "var(--bg-surface-hover)";
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = "var(--border-subtle)";
+                  e.currentTarget.style.background = "var(--bg-surface)";
+                }}
+              />
+            </div>
+
+            <div style={{ marginBottom: 24 }}>
+              <label style={labelStyle}>Password</label>
+              <input
+                type="password"
+                required
+                minLength={6}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                style={inputStyle}
+                placeholder="Min. 6 caratteri"
+                onFocus={(e) => {
+                  e.currentTarget.style.borderColor = "var(--accent)";
+                  e.currentTarget.style.background = "var(--bg-surface-hover)";
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = "var(--border-subtle)";
+                  e.currentTarget.style.background = "var(--bg-surface)";
+                }}
+              />
+            </div>
+
+            {error && (
+              <div
+                style={{
+                  background: "var(--danger-muted)",
+                  border: "1px solid rgba(244, 63, 94, 0.25)",
+                  borderRadius: "var(--radius-sm)",
+                  padding: "10px 14px",
+                  marginBottom: 16,
+                  fontSize: 12,
+                  color: "var(--danger)",
+                  fontFamily: "var(--font-body)",
+                }}
+              >
+                {error}
+              </div>
+            )}
+
+            {success && (
+              <div
+                style={{
+                  background: "var(--success-muted)",
+                  border: "1px solid rgba(52, 211, 153, 0.25)",
+                  borderRadius: "var(--radius-sm)",
+                  padding: "10px 14px",
+                  marginBottom: 16,
+                  fontSize: 12,
+                  color: "var(--success)",
+                  fontFamily: "var(--font-body)",
+                }}
+              >
+                {success}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={loading}
+              style={{
+                width: "100%",
+                padding: 14,
+                borderRadius: "var(--radius-sm)",
+                border: "1px solid transparent",
+                background: loading
+                  ? "var(--accent-muted)"
+                  : "linear-gradient(135deg, var(--accent-light), var(--accent))",
+                color: loading ? "var(--text-muted)" : "var(--bg-deep)",
+                fontSize: 14,
+                fontWeight: 700,
+                fontFamily: "var(--font-display)",
+                letterSpacing: 0.5,
+                cursor: loading ? "default" : "pointer",
+                transition: "all 0.25s cubic-bezier(.4,0,.2,1)",
+                boxShadow: loading
+                  ? "none"
+                  : "0 0 20px rgba(229, 166, 59, 0.2)",
+              }}
+            >
+              {loading
+                ? "Caricamento..."
+                : isSignUp
+                  ? "Crea Account"
+                  : "Accedi"}
+            </button>
+          </form>
+
+          <div
+            style={{
+              textAlign: "center",
+              marginTop: 20,
+              fontSize: 13,
+              color: "var(--text-secondary)",
+            }}
+          >
+            {isSignUp ? "Hai già un account?" : "Non hai un account?"}{" "}
+            <button
+              onClick={() => {
+                setIsSignUp(!isSignUp);
+                setError(null);
+                setSuccess(null);
+              }}
+              style={{
+                background: "none",
+                border: "none",
+                color: "var(--accent)",
+                cursor: "pointer",
+                fontSize: 13,
+                fontFamily: "var(--font-body)",
+                fontWeight: 600,
+                textDecoration: "none",
+                borderBottom: "1px solid var(--accent-muted)",
+                paddingBottom: 1,
+              }}
+            >
+              {isSignUp ? "Accedi" : "Registrati"}
+            </button>
+          </div>
+        </Card>
       </div>
     </div>
   );

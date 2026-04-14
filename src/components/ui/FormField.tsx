@@ -2,22 +2,26 @@ import type { CSSProperties, InputHTMLAttributes } from "react";
 
 const inputStyle: CSSProperties = {
   width: "100%",
-  padding: "8px 12px",
-  borderRadius: 8,
-  border: "1px solid rgba(255,255,255,0.12)",
-  background: "rgba(255,255,255,0.06)",
-  color: "#fff",
+  padding: "10px 14px",
+  borderRadius: "var(--radius-sm)",
+  border: "1px solid var(--border-medium)",
+  background: "rgba(255,255,255,0.04)",
+  color: "var(--text-primary)",
   fontSize: 13,
-  fontFamily: "inherit",
+  fontFamily: "var(--font-body)",
   outline: "none",
+  transition: "border-color 0.2s ease, background 0.2s ease",
+  boxSizing: "border-box" as const,
 };
 
 const labelStyle: CSSProperties = {
-  fontSize: 11,
-  color: "rgba(255,255,255,0.45)",
+  fontFamily: "var(--font-body)",
+  fontSize: 10,
+  fontWeight: 600,
+  color: "var(--text-muted)",
   textTransform: "uppercase",
-  letterSpacing: 0.8,
-  marginBottom: 4,
+  letterSpacing: 1.2,
+  marginBottom: 5,
   display: "block",
 };
 
@@ -29,7 +33,18 @@ export function FormField({ label, ...props }: FormFieldProps) {
   return (
     <div style={{ flex: 1, minWidth: 120 }}>
       <label style={labelStyle}>{label}</label>
-      <input style={inputStyle} {...props} />
+      <input
+        style={inputStyle}
+        onFocus={(e) => {
+          e.currentTarget.style.borderColor = "var(--accent)";
+          e.currentTarget.style.background = "rgba(255,255,255,0.06)";
+        }}
+        onBlur={(e) => {
+          e.currentTarget.style.borderColor = "var(--border-medium)";
+          e.currentTarget.style.background = "rgba(255,255,255,0.04)";
+        }}
+        {...props}
+      />
     </div>
   );
 }
@@ -48,10 +63,10 @@ export function SelectField({ label, value, onChange, options }: SelectFieldProp
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        style={{ ...inputStyle, cursor: "pointer" }}
+        style={{ ...inputStyle, cursor: "pointer", appearance: "none" }}
       >
         {options.map((o) => (
-          <option key={o} value={o} style={{ background: "#1a1a1b" }}>
+          <option key={o} value={o} style={{ background: "#0e1220", color: "#fff" }}>
             {o}
           </option>
         ))}
@@ -65,15 +80,26 @@ export function AddButton({ onClick, label }: { onClick: () => void; label: stri
     <button
       onClick={onClick}
       style={{
-        padding: "8px 16px",
-        borderRadius: 8,
-        border: "none",
-        background: "#f97316",
-        color: "#fff",
-        fontSize: 12,
+        padding: "7px 16px",
+        borderRadius: "var(--radius-full)",
+        border: "1px solid var(--accent)",
+        background: "var(--accent-muted)",
+        color: "var(--accent-light)",
+        fontSize: 11,
         fontWeight: 600,
         cursor: "pointer",
-        fontFamily: "inherit",
+        fontFamily: "var(--font-body)",
+        letterSpacing: 0.3,
+        transition: "all 0.2s ease",
+        textTransform: "uppercase",
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.background = "var(--accent)";
+        e.currentTarget.style.color = "#080b14";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.background = "var(--accent-muted)";
+        e.currentTarget.style.color = "var(--accent-light)";
       }}
     >
       + {label}

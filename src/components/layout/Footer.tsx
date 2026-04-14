@@ -2,14 +2,23 @@ export function Footer() {
   return (
     <div
       style={{
-        padding: "16px 20px",
+        padding: "20px 24px",
         textAlign: "center",
-        borderTop: "1px solid rgba(255,255,255,0.06)",
-        marginTop: 40,
+        borderTop: "1px solid var(--border-subtle)",
+        marginTop: 48,
       }}
     >
-      <div style={{ fontSize: 11, color: "rgba(255,255,255,0.2)" }}>
-        Creator Life OS v1.0 — Prodigi Digitali © 2026
+      <div
+        style={{
+          fontFamily: "var(--font-body)",
+          fontSize: 10,
+          fontWeight: 500,
+          color: "var(--text-ghost)",
+          letterSpacing: 1.5,
+          textTransform: "uppercase",
+        }}
+      >
+        Creator Life OS v2.0 — Prodigi Digitali © 2026
       </div>
     </div>
   );

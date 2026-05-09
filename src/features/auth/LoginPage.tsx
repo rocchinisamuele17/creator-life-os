@@ -38,7 +38,8 @@ export function LoginPage() {
         if (err) setError(err);
       }
     } catch (err: any) {
-      setError("Errore di rete o configurazione. Riprova tra poco.");
+      const currentUrl = import.meta.env.VITE_SUPABASE_URL || "NON TROVATO";
+      setError(`Errore di collegamento. L'indirizzo usato è: ${currentUrl}. Controlla che sia uguale a quello di Supabase!`);
     } finally {
       setLoading(false);
     }

@@ -3,9 +3,9 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
 
 // Lazy Routes
-const LoginPage = lazy(() => import("./features/auth/LoginPage").then(m => ({ default: m.LoginPage })));
+import { LoginPage } from "./features/auth/LoginPage";
+import LandingPage from "./pages/LandingPage";
 const AppLayout = lazy(() => import("./components/layout/AppLayout").then(m => ({ default: m.AppLayout })));
-const LandingPage = lazy(() => import("./pages/LandingPage").then(m => ({ default: m.default })));
 const TermsPage = lazy(() => import("./pages/Terms").then(m => ({ default: m.default })));
 const PrivacyPage = lazy(() => import("./pages/Privacy").then(m => ({ default: m.default })));
 const CookiePage = lazy(() => import("./pages/Cookies").then(m => ({ default: m.default })));

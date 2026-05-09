@@ -15,15 +15,7 @@ if (!rootElement) {
 } else {
   ReactDOM.createRoot(rootElement).render(
     <React.StrictMode>
-      <AuthProvider>
-        <AppProvider>
-          <ToastProvider>
-            <SubscriptionProvider>
-              <App />
-            </SubscriptionProvider>
-          </ToastProvider>
-        </AppProvider>
-      </AuthProvider>
+      <App />
     </React.StrictMode>
   );
 }

@@ -49,7 +49,6 @@ export default function LandingPage() {
         throw dbError;
       }
 
-      if (!supabase) throw new Error("Database non configurato");
       const { count } = await supabase
         .from('waitlist')
         .select('*', { count: 'exact', head: true });

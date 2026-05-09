@@ -1,4 +1,4 @@
-// Version 1.0.5 - Cache Refresh
+// Version 1.0.8 - Force Refresh Login
 import React from "react";
 
 import ReactDOM from "react-dom/client";

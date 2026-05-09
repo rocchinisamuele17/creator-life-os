@@ -157,14 +157,6 @@ export function AppLayout() {
       position: "relative",
       overflowX: "hidden"
     }}>
-      {/* Overlay scuro per leggibilità testi su sfondi chiari */}
-      <div style={{
-        position: "fixed",
-        inset: 0,
-        background: "rgba(0,0,0,0.25)",
-        pointerEvents: "none",
-        zIndex: 0
-      }} />
       <div
         style={{
           padding: "calc(12px + var(--safe-top)) 16px 0",

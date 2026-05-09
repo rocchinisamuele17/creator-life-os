@@ -38,13 +38,14 @@ export function LoginPage() {
     } catch (err: any) {
       console.error('Auth error detail:', err);
       if (err.message === 'Failed to fetch') {
-        setError(`Errore di connessione al database. Verifica che l'URL di Supabase su Vercel sia corretto e non abbia spazi. URL rilevato: ${import.meta.env.VITE_SUPABASE_URL?.substring(0, 20)}...`);
+        setError(`Errore di connessione al database. Verifica l'URL su Vercel. URL rilevato: ${import.meta.env.VITE_SUPABASE_URL?.substring(0, 20)}...`);
       } else {
         setError(err.message || 'Errore generico durante l\'accesso.');
       }
     } finally {
       setLoading(false);
     }
+  };
 
   return (
     <div

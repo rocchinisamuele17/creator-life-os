@@ -19,7 +19,7 @@ export function LoginPage() {
     setLoading(true);
 
     if (!supabase) {
-      setError("Errore: Il database non risponde. Verifica le chiavi su Vercel.");
+      setError("Il database non è collegato. Controlla le chiavi su Vercel.");
       setLoading(false);
       return;
     }
@@ -38,92 +38,48 @@ export function LoginPage() {
         if (err) setError(err);
       }
     } catch (err: any) {
-      const currentUrl = import.meta.env.VITE_SUPABASE_URL || "NON TROVATO";
-      setError(`Errore di collegamento. L'indirizzo usato è: ${currentUrl}. Controlla che sia uguale a quello di Supabase!`);
+      setError("Errore di connessione. Verifica la tua rete o l'URL di Supabase.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: 20,
-        backgroundColor: "#050505",
-        position: "relative"
-      }}
-    >
-      <div
-        className="glass-panel animate-float"
-        style={{
-          width: "100%",
-          maxWidth: 400,
-          padding: 40,
-          zIndex: 1,
-          background: "rgba(10,10,10,0.6)",
-          backdropFilter: "blur(20px)",
-          border: "1px solid rgba(0, 240, 255, 0.2)"
-        }}
-      >
-        <Link to="/" style={{ textDecoration: "none" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 30, justifyContent: "center" }}>
-            <div className="animate-glow" style={{ width: 36, height: 36, borderRadius: 8, background: "var(--accent-gradient)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>⚡</div>
-            <span className="text-gradient" style={{ fontSize: 20, fontWeight: 800 }}>Creator Life OS</span>
-          </div>
-        </Link>
-
-        <h2 style={{ fontSize: 24, fontWeight: 800, color: "#fff", margin: "0 0 8px", textAlign: "center" }}>
-          {isSignUp ? "Registrazione" : "Accedi al Sistema"}
-        </h2>
-
+    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#050505", color: "#fff", fontFamily: "sans-serif" }}>
+      <div style={{ width: "100%", maxWidth: 400, padding: 40, background: "#111", borderRadius: 12, border: "1px solid #333", boxShadow: "0 10px 30px rgba(0,0,0,0.5)" }}>
+        <div style={{ textAlign: "center", marginBottom: 30 }}>
+            <span style={{ fontSize: 24, fontWeight: "bold", background: "linear-gradient(135deg, #00f0ff 0%, #7000ff 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Creator Life OS</span>
+        </div>
+        
+        <h2 style={{ textAlign: "center", marginBottom: 10, fontSize: 20 }}>{isSignUp ? "Nuova Registrazione" : "Accesso Area Riservata"}</h2>
+        
         <form onSubmit={handleSubmit}>
-          <div style={{ marginBottom: 16 }}>
-            <label style={{ fontSize: 12, color: "var(--text-secondary)", display: "block", marginBottom: 8 }}>Email</label>
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              style={{ width: "100%", padding: "12px", borderRadius: 8, border: "1px solid var(--glass-border)", background: "rgba(0,0,0,0.3)", color: "#fff" }}
-              placeholder="es. creator@gmail.com"
-            />
+          <div style={{ marginBottom: 15 }}>
+            <label style={{ display: "block", fontSize: 12, color: "#888", marginBottom: 5 }}>EMAIL</label>
+            <input type="email" value={email} onChange={e => setEmail(e.target.value)} style={{ width: "100%", padding: 12, background: "#000", border: "1px solid #444", borderRadius: 6, color: "#fff", outline: "none" }} required />
           </div>
-
-          <div style={{ marginBottom: 24 }}>
-            <label style={{ fontSize: 12, color: "var(--text-secondary)", display: "block", marginBottom: 8 }}>Password</label>
-            <input
-              type="password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              style={{ width: "100%", padding: "12px", borderRadius: 8, border: "1px solid var(--glass-border)", background: "rgba(0,0,0,0.3)", color: "#fff" }}
-              placeholder="******"
-            />
+          <div style={{ marginBottom: 25 }}>
+            <label style={{ display: "block", fontSize: 12, color: "#888", marginBottom: 5 }}>PASSWORD</label>
+            <input type="password" value={password} onChange={e => setPassword(e.target.value)} style={{ width: "100%", padding: 12, background: "#000", border: "1px solid #444", borderRadius: 6, color: "#fff", outline: "none" }} required />
           </div>
-
-          {error && <div style={{ background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.3)", borderRadius: 8, padding: "10px", marginBottom: 16, fontSize: 13, color: "#ff6b6b" }}>{error}</div>}
-          {success && <div style={{ background: "rgba(16,185,129,0.1)", border: "1px solid rgba(16,185,129,0.3)", borderRadius: 8, padding: "10px", marginBottom: 16, fontSize: 13, color: "#4ade80" }}>{success}</div>}
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="premium-btn"
-            style={{ width: "100%", padding: "14px", background: loading ? "var(--glass-bg)" : "var(--accent-gradient)", color: loading ? "var(--text-secondary)" : "#000", fontWeight: 700, border: "none" }}
-          >
-            {loading ? "Caricamento..." : isSignUp ? "Registrati" : "Accedi"}
+          
+          {error && <div style={{ color: "#ff4444", fontSize: 13, marginBottom: 15, padding: 10, background: "rgba(255,68,68,0.1)", borderRadius: 6, border: "1px solid rgba(255,68,68,0.2)" }}>{error}</div>}
+          {success && <div style={{ color: "#00ff44", fontSize: 13, marginBottom: 15, padding: 10, background: "rgba(0,255,68,0.1)", borderRadius: 6, border: "1px solid rgba(0,255,68,0.2)" }}>{success}</div>}
+          
+          <button type="submit" disabled={loading} style={{ width: "100%", padding: 14, background: "linear-gradient(135deg, #00f0ff 0%, #7000ff 100%)", border: "none", borderRadius: 6, color: "#000", fontWeight: "bold", cursor: "pointer", fontSize: 15 }}>
+            {loading ? "ATTENDI..." : isSignUp ? "REGISTRATI" : "ACCEDI ORA"}
           </button>
         </form>
-
-        <button
-          onClick={() => setIsSignUp(!isSignUp)}
-          style={{ background: "none", border: "none", color: "var(--accent-color)", width: "100%", marginTop: 20, cursor: "pointer", fontSize: 14 }}
-        >
-          {isSignUp ? "Hai già un account? Accedi" : "Nuovo qui? Crea account"}
-        </button>
+        
+        <div style={{ marginTop: 20, textAlign: "center", fontSize: 14 }}>
+          <button onClick={() => setIsSignUp(!isSignUp)} style={{ background: "none", border: "none", color: "#00f0ff", cursor: "pointer", textDecoration: "underline" }}>
+            {isSignUp ? "Hai già un account? Accedi" : "Non hai un account? Registrati"}
+          </button>
+        </div>
+        
+        <div style={{ marginTop: 20, textAlign: "center" }}>
+          <Link to="/" style={{ color: "#666", fontSize: 12 }}>Torna alla Home</Link>
+        </div>
       </div>
     </div>
   );

@@ -95,7 +95,7 @@ export function Settings({ state, setState, showToast }: SettingsProps) {
   const background: BackgroundConfig = state.settings?.background || { type: "default", value: "" };
   const calendarEvents: CalendarEvent[] = state.settings?.calendarEvents || [];
 
-  const [activeSection, setActiveSection] = useState<"theme" | "background" | "calendar" | "data" | "info">("theme");
+  const [activeSection, setActiveSection] = useState<"theme" | "background" | "calendar" | "data" | "subscription" | "info">("theme");
   const [calMonth, setCalMonth] = useState(new Date().getMonth());
   const [calYear, setCalYear] = useState(new Date().getFullYear());
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
@@ -228,6 +228,7 @@ export function Settings({ state, setState, showToast }: SettingsProps) {
     { key: "background", label: "🖼️ Sfondo", desc: "Personalizza lo sfondo" },
     { key: "calendar", label: "📅 Calendario", desc: "Gestisci eventi" },
     { key: "data", label: "💾 Dati", desc: "Backup e ripristino" },
+    { key: "subscription", label: "💳 Abbonamento", desc: "Gestisci pagamenti" },
     { key: "info", label: "ℹ️ Info", desc: "Versione e crediti" },
   ] as const;
 
@@ -833,6 +834,88 @@ export function Settings({ state, setState, showToast }: SettingsProps) {
             <div style={{ fontSize: 11, color: "rgba(255,255,255,0.3)", marginTop: 6 }}>
               I dati vengono sincronizzati automaticamente ogni 1.5 secondi quando sei loggato.
             </div>
+          </div>
+        </div>
+      {/* ════════ SUBSCRIPTION ════════ */}
+      {activeSection === "subscription" && (
+        <div className="glass-panel" style={{ padding: 24, borderRadius: 16 }}>
+          <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 8 }}>💳 Gestione Abbonamento</h3>
+          <p style={{ fontSize: 13, color: "rgba(255,255,255,0.4)", marginBottom: 20 }}>
+            Visualizza lo stato del tuo piano e gestisci i pagamenti.
+          </p>
+
+          <div style={{
+            background: "rgba(255,255,255,0.03)",
+            borderRadius: 12,
+            padding: 20,
+            border: "1px solid rgba(255,255,255,0.06)",
+            marginBottom: 20
+          }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+              <div>
+                <div style={{ fontSize: 12, color: "rgba(255,255,255,0.4)", textTransform: "uppercase", fontWeight: 700 }}>Piano Attuale</div>
+                <div style={{ fontSize: 18, fontWeight: 800, color: "var(--accent-color)" }}>Creator Life PRO</div>
+              </div>
+              <div style={{
+                background: "rgba(16,185,129,0.1)",
+                color: "#10b981",
+                padding: "4px 10px",
+                borderRadius: 20,
+                fontSize: 11,
+                fontWeight: 700,
+                border: "1px solid rgba(16,185,129,0.2)"
+              }}>
+                ATTIVO
+              </div>
+            </div>
+
+            <div style={{ fontSize: 13, color: "rgba(255,255,255,0.6)", marginBottom: 20, lineHeight: 1.5 }}>
+              Il tuo abbonamento si rinnova automaticamente ogni mese. Puoi gestire il metodo di pagamento o annullare in qualsiasi momento.
+            </div>
+
+            <button 
+              onClick={() => window.open('https://billing.stripe.com/p/login/test_91c7ub7Y4d5Cg924gg', '_blank')}
+              style={{
+                width: "100%",
+                padding: "14px",
+                background: "var(--accent-gradient)",
+                border: "none",
+                borderRadius: 10,
+                color: "#000",
+                fontWeight: 700,
+                fontSize: 14,
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 8
+              }}
+            >
+              ⚙️ Gestisci su Stripe
+            </button>
+          </div>
+
+          <div style={{ textAlign: "center" }}>
+            <p style={{ fontSize: 12, color: "rgba(255,255,255,0.3)", marginBottom: 12 }}>
+              Problemi con l'abbonamento? <a href="mailto:support@prodigi.live" style={{ color: "var(--accent-color)" }}>Contatta il supporto</a>
+            </p>
+            <button 
+              onClick={() => {
+                if(confirm("Vuoi davvero annullare l'abbonamento? Manterrai l'accesso fino alla fine del periodo pagato.")) {
+                  window.open('https://billing.stripe.com/p/login/test_91c7ub7Y4d5Cg924gg', '_blank');
+                }
+              }}
+              style={{
+                background: "none",
+                border: "none",
+                color: "rgba(239,68,68,0.6)",
+                fontSize: 12,
+                cursor: "pointer",
+                textDecoration: "underline"
+              }}
+            >
+              Annulla Abbonamento
+            </button>
           </div>
         </div>
       )}

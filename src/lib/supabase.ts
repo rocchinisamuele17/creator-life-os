@@ -5,6 +5,13 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
 
 export const supabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey);
 
-export const supabase = supabaseConfigured
-  ? createClient(supabaseUrl, supabaseAnonKey)
-  : null;
+let supabaseInstance = null;
+try {
+  if (supabaseConfigured) {
+    supabaseInstance = createClient(supabaseUrl, supabaseAnonKey);
+  }
+} catch (err) {
+  console.error("Errore critico inizializzazione Supabase:", err);
+}
+
+export const supabase = supabaseInstance;

@@ -3,43 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import styles from './LoginPage.module.css';
 import { supabase } from '../../lib/supabase';
 
-/* ────────────────────────────────────────────
-   ICONE SVG inline
-   ──────────────────────────────────────────── */
-const EyeIcon = ({ open }: { open: boolean }) => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-    {open ? (
-      <>
-        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-        <circle cx="12" cy="12" r="3" />
-      </>
-    ) : (
-      <>
-        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94" />
-        <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19" />
-        <line x1="1" y1="1" x2="23" y2="23" />
-      </>
-    )}
-  </svg>
-);
-
-const MailIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="2" y="4" width="20" height="16" rx="2" />
-    <path d="M22 7l-10 6L2 7" />
-  </svg>
-);
-
-const LockIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="3" y="11" width="18" height="11" rx="2" />
-    <path d="M7 11V7a5 5 0 0110 0v4" />
-  </svg>
-);
-
-/* ────────────────────────────────────────────
-   COMPONENTE LOGIN
-   ──────────────────────────────────────────── */
 export default function LoginPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
@@ -64,7 +27,7 @@ export default function LoginPage() {
           password,
         });
         if (signUpError) throw signUpError;
-        setSuccess('Account creato! Controlla la tua email per confermare, poi accedi.');
+        setSuccess('Account creato! Controlla la tua email per confermare.');
         setIsRegister(false);
       } else {
         const { error: signInError } = await supabase.auth.signInWithPassword({
@@ -76,7 +39,7 @@ export default function LoginPage() {
       }
     } catch (err: any) {
       console.error('Auth Error:', err);
-      setError(err.message || 'Errore durante l\'autenticazione. Riprova.');
+      setError(err.message || 'Errore di autenticazione.');
     } finally {
       setLoading(false);
     }
@@ -84,13 +47,11 @@ export default function LoginPage() {
 
   return (
     <div className={styles.page}>
-      {/* Effetti background */}
       <div className={styles.orbTop} />
       <div className={styles.orbBottom} />
       <div className={styles.gridOverlay} />
       <div className={styles.grain} />
 
-      {/* Nav minima */}
       <nav className={styles.nav}>
         <Link to="/" className={styles.logo}>
           <span className={styles.logoDot} />
@@ -98,35 +59,28 @@ export default function LoginPage() {
         </Link>
       </nav>
 
-      {/* Card login */}
       <main className={styles.main}>
         <div className={styles.card}>
           <div className={styles.cardGlow} />
 
-          {/* Header */}
           <div className={styles.cardHeader}>
             <div className={styles.iconWrap}>
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#00f0ff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#00f0ff" strokeWidth="1.5">
                 <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
               </svg>
             </div>
             <h1 className={styles.title}>
-              {isRegister ? 'Crea il tuo account' : 'Bentornato, creator'}
+              {isRegister ? 'Crea Account' : 'Bentornato'}
             </h1>
             <p className={styles.subtitle}>
-              {isRegister
-                ? 'Unisciti alla community di creator che crescono ogni giorno'
-                : 'Accedi al tuo ecosistema personale'}
+              {isRegister ? 'Unisciti ai creator' : 'Accedi al tuo ecosistema'}
             </p>
           </div>
 
-          {/* Form */}
           <form onSubmit={handleSubmit} className={styles.form}>
-            {/* Email */}
             <div className={`${styles.inputGroup} ${focusedField === 'email' ? styles.inputFocused : ''}`}>
               <label className={styles.label}>Email</label>
               <div className={styles.inputWrap}>
-                <span className={styles.inputIcon}><MailIcon /></span>
                 <input
                   type="email"
                   value={email}
@@ -136,16 +90,13 @@ export default function LoginPage() {
                   placeholder="tu@esempio.com"
                   className={styles.input}
                   required
-                  autoComplete="email"
                 />
               </div>
             </div>
 
-            {/* Password */}
             <div className={`${styles.inputGroup} ${focusedField === 'password' ? styles.inputFocused : ''}`}>
               <label className={styles.label}>Password</label>
               <div className={styles.inputWrap}>
-                <span className={styles.inputIcon}><LockIcon /></span>
                 <input
                   type={showPw ? 'text' : 'password'}
                   value={password}
@@ -155,53 +106,29 @@ export default function LoginPage() {
                   placeholder="La tua password"
                   className={styles.input}
                   required
-                  autoComplete={isRegister ? 'new-password' : 'current-password'}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPw(!showPw)}
                   className={styles.eyeBtn}
-                  tabIndex={-1}
-                  aria-label={showPw ? 'Nascondi password' : 'Mostra password'}
                 >
-                  <EyeIcon open={showPw} />
+                  {showPw ? '👁️' : '🔒'}
                 </button>
               </div>
             </div>
 
-            {/* Messaggi errore/successo */}
-            {error && (
-              <div className={styles.alertError}>
-                <span className={styles.alertIcon}>!</span>
-                {error}
-              </div>
-            )}
-            {success && (
-              <div className={styles.alertSuccess}>
-                <span className={styles.alertIcon}>✓</span>
-                {success}
-              </div>
-            )}
+            {error && <div className={styles.alertError}>{error}</div>}
+            {success && <div className={styles.alertSuccess}>{success}</div>}
 
-            {/* CTA */}
             <button type="submit" className={styles.cta} disabled={loading}>
               <span className={styles.ctaText}>
-                {loading ? 'Attendi...' : isRegister ? 'Crea Account' : 'Accedi'}
+                {loading ? 'Attendi...' : isRegister ? 'Registrati' : 'Accedi'}
               </span>
-              {!loading && (
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
-              )}
-              {loading && <span className={styles.spinner} />}
             </button>
           </form>
 
-          {/* Toggle login/register */}
           <div className={styles.toggle}>
-            <span className={styles.toggleText}>
-              {isRegister ? 'Hai gia un account?' : 'Non hai un account?'}
-            </span>
+            <span className={styles.toggleText}>{isRegister ? 'Hai un account?' : 'Non hai un account?'}</span>
             <button
               onClick={() => { setIsRegister(!isRegister); setError(null); setSuccess(null); }}
               className={styles.toggleBtn}
@@ -210,24 +137,10 @@ export default function LoginPage() {
             </button>
           </div>
 
-          {/* Divider */}
-          <div className={styles.divider}>
-            <span>oppure</span>
-          </div>
-
-          {/* Back to home */}
-          <Link to="/" className={styles.backLink}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M19 12H5M12 19l-7-7 7-7" />
-            </svg>
-            Torna alla home
-          </Link>
+          <div className={styles.divider}><span>oppure</span></div>
+          <Link to="/" className={styles.backLink}>Torna alla home</Link>
         </div>
-
-        {/* Footer */}
-        <p className={styles.footer}>
-          Prodigi Digitali &copy; {new Date().getFullYear()} &middot; Creator Life OS
-        </p>
+        <p className={styles.footer}>Prodigi Digitali © 2026</p>
       </main>
     </div>
   );

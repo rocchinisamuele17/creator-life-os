@@ -19,9 +19,30 @@ function PageLoading() {
 }
 
 export default function App() {
+  const { user, isConfigured } = useAuth();
+  
   return (
-    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#050505", color: "#00f0ff", fontSize: "32px", fontWeight: "bold" }}>
-      ⚡ PRODIGI.LIVE - TEST SYSTEM ONLINE ⚡
-    </div>
+    <BrowserRouter>
+      <Suspense fallback={<PageLoading />}>
+        <Routes>
+          <Route 
+            path="/" 
+            element={isConfigured && user ? <Navigate to="/app" replace /> : <LandingPage />} 
+          />
+          <Route 
+            path="/login" 
+            element={isConfigured && user ? <Navigate to="/app" replace /> : <LoginPage />} 
+          />
+          <Route path="/termini" element={<TermsPage />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
+          <Route path="/cookie" element={<CookiePage />} />
+          <Route path="/pricing" element={<PricingPage />} />
+          <Route 
+            path="/app/*" 
+            element={<AppLayout />} 
+          />
+        </Routes>
+      </Suspense>
+    </BrowserRouter>
   );
 }

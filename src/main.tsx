@@ -9,19 +9,24 @@ import { ToastProvider } from "./context/ToastContext";
 import { SubscriptionProvider } from "./hooks/useSubscription";
 import "./index.css";
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <AuthProvider>
-      <AppProvider>
-        <ToastProvider>
-          <SubscriptionProvider>
-            <App />
-          </SubscriptionProvider>
-        </ToastProvider>
-      </AppProvider>
-    </AuthProvider>
-  </React.StrictMode>
-);
+const rootElement = document.getElementById("root");
+if (!rootElement) {
+  console.error("Errore fatale: Elemento #root non trovato nel DOM.");
+} else {
+  ReactDOM.createRoot(rootElement).render(
+    <React.StrictMode>
+      <AuthProvider>
+        <AppProvider>
+          <ToastProvider>
+            <SubscriptionProvider>
+              <App />
+            </SubscriptionProvider>
+          </ToastProvider>
+        </AppProvider>
+      </AuthProvider>
+    </React.StrictMode>
+  );
+}
 
 // Registrazione Service Worker per l'App (PWA)
 /* 

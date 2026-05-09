@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { supabase } from "../../lib/supabase";
 
 export function LoginPage() {
   const { signIn, signUp } = useAuth();
@@ -16,6 +17,15 @@ export function LoginPage() {
     setError(null);
     setSuccess(null);
     setLoading(true);
+
+    if (!supabase) {
+      const missing = [];
+      if (!import.meta.env.VITE_SUPABASE_URL) missing.push("URL");
+      if (!import.meta.env.VITE_SUPABASE_ANON_KEY) missing.push("Anon Key");
+      setError(`Configurazione incompleta: manca ${missing.join(" e ")}. Controlla Vercel!`);
+      setLoading(false);
+      return;
+    }
 
     if (isSignUp) {
       const err = await signUp(email, password);

@@ -162,6 +162,12 @@ export default function PricingPage() {
       return;
     }
 
+    const stripeKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
+    if (!stripeKey) {
+      alert("Configurazione Stripe mancante. Contatta il supporto.");
+      return;
+    }
+
     // Per il Pro, avvia Stripe Checkout
     try {
       if (!supabase) throw new Error("Supabase non configurato");

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'prodigi-v25-background-fix';
+const CACHE_NAME = 'prodigi-v1-0-official-final';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',

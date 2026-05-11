@@ -1,4 +1,7 @@
 import { useState } from "react";
+import { supabase } from "../../lib/supabase";
+import { toast } from "../../components/ui/Toast";
+
 
 type Platform = "instagram" | "tiktok" | "youtube";
 
@@ -8,6 +11,8 @@ export function PreviewStudio() {
   const [caption, setCaption] = useState("Questo è un test per il mio prossimo post virale! 🚀 Segui per altri contenuti ✨ #creator #lifeos");
   const [username, setUsername] = useState("creator_pro");
   const [isMediaVideo, setIsMediaVideo] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
+
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -23,6 +28,43 @@ export function PreviewStudio() {
     // Controllo basico per video
     setIsMediaVideo(url.match(/\.(mp4|webm|ogg|mov)/i) !== null);
   };
+
+  const generateAICaption = async () => {
+    if (isGenerating) return;
+    setIsGenerating(true);
+    try {
+      const { data: { session } } = await supabase!.auth.getSession();
+      if (!session) {
+        toast("Sessione scaduta. Esci e rientra.", "error");
+        return;
+      }
+
+      const response = await fetch('/api/ai/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session?.access_token}`
+        },
+        body: JSON.stringify({
+          prompt: `Generami una caption virale ed efficace per un post su ${platform}. Il post parla di: "${caption || 'un contenuto per creator'}". Usa un tono coinvolgente, aggiungi emoji appropriate e degli hashtag rilevanti. Rispondi solo con il testo della caption.`,
+          context: { platform, currentCaption: caption }
+        })
+      });
+
+      const data = await response.json();
+      if (data.content) {
+        setCaption(data.content);
+        toast("✨ Caption generata!", "success");
+      } else {
+        toast(data.error || "Errore AI", "error");
+      }
+    } catch (error) {
+      toast("Errore di connessione", "error");
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
 
   const renderMedia = (platformStyle: React.CSSProperties) => {
     if (isMediaVideo) {
@@ -136,30 +178,31 @@ export function PreviewStudio() {
               />
             </label>
 
-            <label style={{ display: "block", marginBottom: 12 }}>
-              <span style={{ fontSize: 12, color: "var(--text-secondary)", display: "block", marginBottom: 6 }}>Immagine/Video URL</span>
-              <input
-                type="text"
-                value={mediaUrl.startsWith("blob:") ? "" : mediaUrl}
-                onChange={e => handleUrlChange(e.target.value)}
-                placeholder="Incolla link diretto (es. .jpg, .mp4)"
-                style={{
-                  width: "100%",
-                  padding: 12,
-                  background: "rgba(0,0,0,0.2)",
-                  border: "1px solid rgba(255,255,255,0.1)",
-                  borderRadius: 8,
-                  color: "#fff"
-                }}
-              />
-            </label>
-
-            <label style={{ display: "block" }}>
-              <span style={{ fontSize: 12, color: "var(--text-secondary)", display: "block", marginBottom: 6 }}>Caption / Corpo del Post</span>
+            <div style={{ marginBottom: 20 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+                <span style={{ fontSize: 12, color: "var(--text-secondary)", fontWeight: 600 }}>Caption / Corpo del Post</span>
+                <button 
+                  onClick={generateAICaption}
+                  disabled={isGenerating}
+                  style={{
+                    background: "rgba(124, 58, 237, 0.1)",
+                    border: "1px solid rgba(124, 58, 237, 0.3)",
+                    color: "#a78bfa",
+                    padding: "4px 10px",
+                    borderRadius: 6,
+                    fontSize: 11,
+                    fontWeight: 600,
+                    cursor: "pointer"
+                  }}
+                >
+                  {isGenerating ? "✨ Generando..." : "✨ AI Caption"}
+                </button>
+              </div>
               <textarea
                 value={caption}
                 onChange={e => setCaption(e.target.value)}
-                rows={4}
+                rows={6}
+                placeholder="Scrivi qui o usa l'AI per generare una caption virale..."
                 style={{
                   width: "100%",
                   padding: 12,
@@ -167,10 +210,14 @@ export function PreviewStudio() {
                   border: "1px solid rgba(255,255,255,0.1)",
                   borderRadius: 8,
                   color: "#fff",
-                  resize: "vertical"
+                  resize: "vertical",
+                  fontFamily: "inherit",
+                  fontSize: 14,
+                  lineHeight: 1.5
                 }}
               />
-            </label>
+            </div>
+
           </div>
         </div>
 

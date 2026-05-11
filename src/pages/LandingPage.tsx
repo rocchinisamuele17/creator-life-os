@@ -399,7 +399,54 @@ export default function LandingPage() {
             )}
           </div>
         </section>
+
+        {/* Instagram / Community Section */}
+        <section style={{ padding: "80px 20px", background: "linear-gradient(to bottom, #050505, #0a0a0a)" }}>
+          <div className="glass-panel" style={{ maxWidth: 1000, margin: "0 auto", padding: "40px", display: "flex", flexWrap: "wrap", alignItems: "center", gap: 40, border: "1px solid rgba(225, 48, 108, 0.2)", background: "rgba(225, 48, 108, 0.02)" }}>
+            <div style={{ flex: "1 1 400px" }}>
+              <div style={{ display: "inline-block", padding: "6px 12px", borderRadius: 20, background: "rgba(225, 48, 108, 0.1)", color: "#E1306C", fontSize: 12, fontWeight: 700, marginBottom: 16 }}>COMMUNITY</div>
+              <h2 style={{ fontSize: 32, fontWeight: 800, marginBottom: 16 }}>Segui l'evoluzione su <span style={{ color: "#E1306C" }}>Instagram</span></h2>
+              <p style={{ color: "var(--text-secondary)", fontSize: 16, lineHeight: 1.6, marginBottom: 24 }}>
+                Unisciti a oltre 1.000 creator. Condividiamo ogni giorno tips, dietro le quinte dello sviluppo e strategie per scalare la tua presenza digitale con l'AI.
+              </p>
+              <a 
+                href="https://instagram.com/pesoinvisible" 
+                target="_blank" 
+                rel="noreferrer"
+                className="premium-btn primary"
+                style={{ 
+                  display: "inline-flex", 
+                  alignItems: "center", 
+                  gap: 10, 
+                  padding: "14px 28px", 
+                  background: "linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)",
+                  border: "none",
+                  color: "#fff"
+                }}
+              >
+                <span>Segui @pesoinvisible</span>
+                <span style={{ fontSize: 18 }}>↗</span>
+              </a>
+            </div>
+            
+            <div style={{ flex: "1 1 300px", display: "flex", justifyContent: "center" }}>
+              <div style={{ position: "relative", width: 220, height: 220, padding: 10, background: "#fff", borderRadius: 20, boxShadow: "0 20px 40px rgba(225, 48, 108, 0.2)" }}>
+                <img 
+                  src="/qr-instagram.png" 
+                  alt="QR Code Instagram @pesoinvisible" 
+                  style={{ width: "100%", height: "100%", borderRadius: 10 }}
+                  onError={(e) => {
+                    e.currentTarget.src = "https://via.placeholder.com/200x200?text=QR+Code";
+                    e.currentTarget.style.opacity = "0.5";
+                  }}
+                />
+                <div style={{ position: "absolute", top: -10, right: -10, background: "#E1306C", color: "#fff", padding: "4px 12px", borderRadius: 10, fontSize: 10, fontWeight: 800 }}>SCAN ME</div>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
+
 
       <footer style={{ padding: "60px 20px 40px", borderTop: "1px solid var(--glass-border)", color: "var(--text-secondary)", fontSize: 14, background: "rgba(0,0,0,0.8)" }}>
         <div style={{ maxWidth: 1000, margin: "0 auto", display: "flex", flexWrap: "wrap", justifyContent: "space-between", gap: 40, paddingBottom: 40 }}>
@@ -411,9 +458,10 @@ export default function LandingPage() {
             </div>
             <p style={{ lineHeight: 1.6, marginBottom: 20 }}>L'ecosistema intelligente per creator che vogliono trasformare la propria passione in un vero business.</p>
             <div style={{ display: "flex", gap: 16 }}>
-              <a href="https://instagram.com/rocchinisamuele17" target="_blank" rel="noreferrer" style={{ color: "var(--text-secondary)", textDecoration: "none", fontSize: 20 }}>📱</a>
+              <a href="https://instagram.com/pesoinvisible" target="_blank" rel="noreferrer" style={{ color: "var(--text-secondary)", textDecoration: "none", fontSize: 20 }}>📱</a>
               <a href="mailto:liveprodigi@gmail.com" style={{ color: "var(--text-secondary)", textDecoration: "none", fontSize: 20 }}>✉️</a>
             </div>
+
           </div>
 
           <div style={{ flex: "1 1 150px" }}>

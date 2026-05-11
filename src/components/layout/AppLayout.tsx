@@ -89,15 +89,16 @@ export function AppLayout() {
   if (isConfigured && loading) {
     return (
       <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ textAlign: "center" }}>
           <div className="animate-float" style={{ marginBottom: 12 }}>
             <img src="/logo.png" alt="Logo" style={{ width: 50, height: 50, filter: "drop-shadow(0 0 10px var(--accent-color)) hue-rotate(180deg)" }} />
           </div>
-
           <div style={{ fontSize: 14, color: "rgba(255,255,255,0.5)" }}>Apertura ecosistema...</div>
         </div>
       </div>
     );
   }
+
 
   if (isConfigured && !user) {
     return <Navigate to="/login" replace />;

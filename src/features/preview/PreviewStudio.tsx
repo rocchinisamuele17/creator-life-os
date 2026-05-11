@@ -2,7 +2,6 @@ import { useState } from "react";
 import { supabase } from "../../lib/supabase";
 import { toast } from "../../components/ui/Toast";
 
-
 type Platform = "instagram" | "tiktok" | "youtube";
 
 export function PreviewStudio() {
@@ -12,7 +11,10 @@ export function PreviewStudio() {
   const [username, setUsername] = useState("creator_pro");
   const [isMediaVideo, setIsMediaVideo] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [aiContext, setAiContext] = useState("");
+  const [tone, setTone] = useState("Coinvolgente");
 
+  const TONES = ["Coinvolgente", "Professionale", "Divertente", "Persuasivo", "Emozionale", "Provocatorio"];
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -36,6 +38,7 @@ export function PreviewStudio() {
       const { data: { session } } = await supabase!.auth.getSession();
       if (!session) {
         toast("Sessione scaduta. Esci e rientra.", "error");
+        setIsGenerating(false);
         return;
       }
 
@@ -46,8 +49,20 @@ export function PreviewStudio() {
           'Authorization': `Bearer ${session?.access_token}`
         },
         body: JSON.stringify({
-          prompt: `Generami una caption virale ed efficace per un post su ${platform}. Il post parla di: "${caption || 'un contenuto per creator'}". Usa un tono coinvolgente, aggiungi emoji appropriate e degli hashtag rilevanti. Rispondi solo con il testo della caption.`,
-          context: { platform, currentCaption: caption }
+          prompt: `Generami una caption virale ed efficace per un post su ${platform}. 
+          
+          ARGOMENTO DEL POST: "${aiContext || 'Contenuto per creator'}"
+          TONO DELLA VOCE: "${tone}"
+          TESTO ATTUALE (se presente): "${caption}"
+
+          ISTRUZIONI:
+          - Scrivi una caption completa, lunga e strutturata.
+          - Includi un Hook iniziale forte.
+          - Usa emoji in modo strategico.
+          - Aggiungi una Call to Action (CTA) alla fine.
+          - Includi 5-10 hashtag rilevanti.
+          - Rispondi SOLO con il testo della caption, senza commenti aggiuntivi.`,
+          context: { platform, tone, subject: aiContext }
         })
       });
 
@@ -64,7 +79,6 @@ export function PreviewStudio() {
       setIsGenerating(false);
     }
   };
-
 
   const renderMedia = (platformStyle: React.CSSProperties) => {
     if (isMediaVideo) {
@@ -157,52 +171,87 @@ export function PreviewStudio() {
 
             <div style={{ display: "flex", alignItems: "center", gap: 10, margin: "20px 0" }}>
               <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.1)" }} />
-              <span style={{ fontSize: 10, color: "var(--text-secondary)" }}>OPPURE USA UN LINK</span>
+              <span style={{ fontSize: 10, color: "var(--text-secondary)" }}>OPPURE PERSONALIZZA IL TESTO</span>
               <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.1)" }} />
             </div>
 
-            <label style={{ display: "block", marginBottom: 12 }}>
-              <span style={{ fontSize: 12, color: "var(--text-secondary)", display: "block", marginBottom: 6 }}>Nome Utente</span>
-              <input
-                type="text"
-                value={username}
-                onChange={e => setUsername(e.target.value)}
-                style={{
-                  width: "100%",
-                  padding: 12,
-                  background: "rgba(0,0,0,0.2)",
-                  border: "1px solid rgba(255,255,255,0.1)",
-                  borderRadius: 8,
-                  color: "#fff"
-                }}
-              />
-            </label>
-
-            <div style={{ marginBottom: 20 }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-                <span style={{ fontSize: 12, color: "var(--text-secondary)", fontWeight: 600 }}>Caption / Corpo del Post</span>
-                <button 
-                  onClick={generateAICaption}
-                  disabled={isGenerating}
+            <div className="glass-panel" style={{ padding: 24, background: "rgba(124, 58, 237, 0.03)", border: "1px solid rgba(124, 58, 237, 0.1)", marginBottom: 20 }}>
+              <h3 style={{ fontSize: 16, marginBottom: 16, color: "#a78bfa" }}>✨ AI Copywriter</h3>
+              
+              <label style={{ display: "block", marginBottom: 16 }}>
+                <span style={{ fontSize: 12, color: "var(--text-secondary)", display: "block", marginBottom: 6 }}>Di cosa parla il tuo post? (Dettagli per l'AI)</span>
+                <textarea
+                  value={aiContext}
+                  onChange={e => setAiContext(e.target.value)}
+                  placeholder="Esempio: 3 segreti per crescere su Instagram partendo da zero nel 2024..."
+                  rows={3}
                   style={{
-                    background: "rgba(124, 58, 237, 0.1)",
-                    border: "1px solid rgba(124, 58, 237, 0.3)",
-                    color: "#a78bfa",
-                    padding: "4px 10px",
-                    borderRadius: 6,
-                    fontSize: 11,
-                    fontWeight: 600,
-                    cursor: "pointer"
+                    width: "100%",
+                    padding: 12,
+                    background: "rgba(0,0,0,0.3)",
+                    border: "1px solid rgba(255,255,255,0.1)",
+                    borderRadius: 8,
+                    color: "#fff",
+                    fontSize: 13,
+                    fontFamily: "inherit"
                   }}
-                >
-                  {isGenerating ? "✨ Generando..." : "✨ AI Caption"}
-                </button>
+                />
+              </label>
+
+              <div style={{ display: "flex", gap: 12, marginBottom: 20 }}>
+                <div style={{ flex: 1 }}>
+                  <span style={{ fontSize: 12, color: "var(--text-secondary)", display: "block", marginBottom: 6 }}>Tono della voce</span>
+                  <select
+                    value={tone}
+                    onChange={e => setTone(e.target.value)}
+                    style={{
+                      width: "100%",
+                      padding: 10,
+                      background: "rgba(0,0,0,0.3)",
+                      border: "1px solid rgba(255,255,255,0.1)",
+                      borderRadius: 8,
+                      color: "#fff",
+                      fontSize: 13,
+                      cursor: "pointer"
+                    }}
+                  >
+                    {TONES.map(t => <option key={t} value={t} style={{ background: "#111" }}>{t}</option>)}
+                  </select>
+                </div>
+                <div style={{ flex: 1, display: "flex", alignItems: "flex-end" }}>
+                  <button 
+                    onClick={generateAICaption}
+                    disabled={isGenerating || !aiContext.trim()}
+                    style={{
+                      width: "100%",
+                      background: aiContext.trim() ? "var(--accent-gradient)" : "rgba(255,255,255,0.05)",
+                      border: "none",
+                      color: aiContext.trim() ? "#000" : "rgba(255,255,255,0.2)",
+                      padding: "10px",
+                      borderRadius: 8,
+                      fontSize: 13,
+                      fontWeight: 700,
+                      cursor: aiContext.trim() ? "pointer" : "default",
+                      transition: "all 0.2s"
+                    }}
+                  >
+                    {isGenerating ? "⏳ Generando..." : "✨ Genera Caption"}
+                  </button>
+                </div>
               </div>
+            </div>
+
+            <div className="glass-panel" style={{ padding: 24 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+                <span style={{ fontSize: 14, fontWeight: 700, color: "#fff" }}>Anteprima Testo</span>
+                <span style={{ fontSize: 11, color: "var(--text-secondary)" }}>{caption.length} caratteri</span>
+              </div>
+              
               <textarea
                 value={caption}
                 onChange={e => setCaption(e.target.value)}
                 rows={6}
-                placeholder="Scrivi qui o usa l'AI per generare una caption virale..."
+                placeholder="La tua caption apparirà qui..."
                 style={{
                   width: "100%",
                   padding: 12,
@@ -217,7 +266,6 @@ export function PreviewStudio() {
                 }}
               />
             </div>
-
           </div>
         </div>
 
@@ -238,7 +286,7 @@ export function PreviewStudio() {
             }}
             className="animate-float"
           >
-            {/* Notch Notch Notch */}
+            {/* Notch */}
             <div style={{ position: "absolute", top: 0, left: "50%", transform: "translateX(-50%)", width: 120, height: 25, background: "#222", borderBottomLeftRadius: 15, borderBottomRightRadius: 15, zIndex: 10 }}></div>
 
             {/* Platform Mockup rendering */}
@@ -306,7 +354,6 @@ export function PreviewStudio() {
                 </div>
               </div>
             )}
-
           </div>
         </div>
       </div>

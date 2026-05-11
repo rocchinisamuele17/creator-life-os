@@ -70,9 +70,24 @@ export default function LandingPage() {
       {/* Navbar Responsive */}
       <nav className="landing-nav">
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <div className="animate-glow" style={{ width: 36, height: 36, borderRadius: 8, background: "var(--accent-gradient)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>⚡</div>
+          <img 
+            src="/logo.png" 
+            alt="Prodigi Logo" 
+            style={{ 
+              width: 40, 
+              height: 40, 
+              objectFit: "contain",
+              filter: "drop-shadow(0 0 8px var(--accent-color)) brightness(1.2) hue-rotate(180deg)",
+              animation: "pulse-glow 2s infinite ease-in-out"
+            }} 
+            onError={(e) => {
+              e.currentTarget.style.display = 'none';
+              e.currentTarget.parentElement!.insertAdjacentHTML('afterbegin', '<div class="animate-glow" style="width: 36px; height: 36px; borderRadius: 8px; background: var(--accent-gradient); display: flex; alignItems: center; justifyContent: center; fontSize: 18px">⚡</div>');
+            }}
+          />
           <span className="text-gradient" style={{ fontSize: 20, fontWeight: 800 }}>Creator Life OS</span>
         </div>
+
 
         <div className="landing-nav-links">
           <a href="#features" className="landing-nav-link">Caratteristiche</a>
@@ -453,9 +468,14 @@ export default function LandingPage() {
           
           <div style={{ flex: "1 1 250px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
-              <div className="animate-glow" style={{ width: 24, height: 24, borderRadius: 6, background: "var(--accent-gradient)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12 }}>⚡</div>
+              <img 
+                src="/logo.png" 
+                alt="Logo" 
+                style={{ width: 32, height: 32, objectFit: "contain", filter: "drop-shadow(0 0 5px var(--accent-color)) hue-rotate(180deg)" }} 
+              />
               <span style={{ fontSize: 18, fontWeight: 800, color: "#fff" }}>Creator Life OS</span>
             </div>
+
             <p style={{ lineHeight: 1.6, marginBottom: 20 }}>L'ecosistema intelligente per creator che vogliono trasformare la propria passione in un vero business.</p>
             <div style={{ display: "flex", gap: 16 }}>
               <a href="https://instagram.com/pesoinvisible" target="_blank" rel="noreferrer" style={{ color: "var(--text-secondary)", textDecoration: "none", fontSize: 20 }}>📱</a>

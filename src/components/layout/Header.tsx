@@ -3,22 +3,21 @@ export function Header() {
     <div
       style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}
     >
-      <div
-        className="animate-glow animate-float"
-        style={{
-          width: 36,
-          height: 36,
-          borderRadius: 8,
-          background: "var(--accent-gradient)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          fontSize: 18,
-          boxShadow: "0 0 15px rgba(0, 240, 255, 0.4)"
+      <img 
+        src="/logo.png" 
+        alt="Logo" 
+        style={{ 
+          width: 40, 
+          height: 40, 
+          objectFit: "contain",
+          filter: "drop-shadow(0 0 10px var(--accent-color)) brightness(1.2) hue-rotate(180deg)",
+          animation: "pulse-glow 2s infinite ease-in-out"
+        }} 
+        onError={(e) => {
+          e.currentTarget.style.display = 'none';
+          e.currentTarget.parentElement!.insertAdjacentHTML('afterbegin', '<div style="width: 36px; height: 36px; border-radius: 8px; background: var(--accent-gradient); display: flex; align-items: center; justify-content: center; font-size: 18px">⚡</div>');
         }}
-      >
-        ⚡
-      </div>
+      />
       <div>
         <div 
           className="text-gradient"

@@ -7,10 +7,10 @@ export function Header() {
         src="/logo.png" 
         alt="Logo" 
         style={{ 
-          width: 40, 
-          height: 40, 
+          width: 50, 
+          height: 50, 
           objectFit: "contain",
-          filter: "drop-shadow(0 0 10px var(--accent-color)) brightness(1.2) hue-rotate(180deg)",
+          filter: "invert(1) brightness(1.5) drop-shadow(0 0 5px var(--accent-color))",
           animation: "pulse-glow 2s infinite ease-in-out"
         }} 
         onError={(e) => {

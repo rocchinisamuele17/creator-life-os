@@ -70,16 +70,16 @@ export default function LandingPage() {
       {/* Navbar Responsive */}
       <nav className="landing-nav">
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <img 
-            src="/logo.png" 
-            alt="Prodigi Logo" 
-            style={{ 
-              width: 40, 
-              height: 40, 
-              objectFit: "contain",
-              filter: "drop-shadow(0 0 8px var(--accent-color)) brightness(1.2) hue-rotate(180deg)",
-              animation: "pulse-glow 2s infinite ease-in-out"
-            }} 
+            <img 
+              src="/logo.png" 
+              alt="Prodigi Logo" 
+              style={{ 
+                width: 50, 
+                height: 50, 
+                objectFit: "contain",
+                filter: "invert(1) brightness(1.5) drop-shadow(0 0 5px var(--accent-color))",
+                animation: "pulse-glow 2s infinite ease-in-out"
+              }} 
             onError={(e) => {
               e.currentTarget.style.display = 'none';
               e.currentTarget.parentElement!.insertAdjacentHTML('afterbegin', '<div class="animate-glow" style="width: 36px; height: 36px; borderRadius: 8px; background: var(--accent-gradient); display: flex; alignItems: center; justifyContent: center; fontSize: 18px">⚡</div>');
@@ -427,7 +427,7 @@ export default function LandingPage() {
               <img 
                 src="/logo.png" 
                 alt="Logo" 
-                style={{ width: 32, height: 32, objectFit: "contain", filter: "drop-shadow(0 0 5px var(--accent-color)) hue-rotate(180deg)" }} 
+                style={{ width: 40, height: 40, objectFit: "contain", filter: "invert(1) brightness(1.5) drop-shadow(0 0 5px var(--accent-color))" }} 
               />
               <span style={{ fontSize: 18, fontWeight: 800, color: "#fff" }}>Creator Life OS</span>
             </div>

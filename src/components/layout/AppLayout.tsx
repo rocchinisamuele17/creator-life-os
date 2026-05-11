@@ -28,7 +28,7 @@ const AICopilot = lazy(() => import("../../features/ai/AICopilot").then(m => ({ 
 function FeatureLoading() {
   return (
     <div style={{ display: "flex", justifyContent: "center", alignItems: "center", padding: "100px 0" }}>
-      <img src="/logo.png" alt="Loading" style={{ width: 40, height: 40, filter: "drop-shadow(0 0 8px var(--accent-color)) hue-rotate(180deg)", animation: "pulse-glow 2s infinite ease-in-out" }} />
+      <img src="/logo.png" alt="Loading" style={{ width: 40, height: 40, filter: "invert(1) brightness(1.5) drop-shadow(0 0 8px var(--accent-color))", animation: "pulse-glow 2s infinite ease-in-out" }} />
     </div>
 
   );
@@ -91,7 +91,7 @@ export function AppLayout() {
       <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
         <div style={{ textAlign: "center" }}>
           <div className="animate-float" style={{ marginBottom: 12 }}>
-            <img src="/logo.png" alt="Logo" style={{ width: 50, height: 50, filter: "drop-shadow(0 0 10px var(--accent-color)) hue-rotate(180deg)" }} />
+            <img src="/logo.png" alt="Logo" style={{ width: 60, height: 60, filter: "invert(1) brightness(1.5) drop-shadow(0 0 10px var(--accent-color))" }} />
           </div>
           <div style={{ fontSize: 14, color: "rgba(255,255,255,0.5)" }}>Apertura ecosistema...</div>
         </div>

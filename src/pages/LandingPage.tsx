@@ -421,8 +421,9 @@ export default function LandingPage() {
       <footer style={{ padding: "60px 20px 40px", borderTop: "1px solid var(--glass-border)", color: "var(--text-secondary)", fontSize: 14, background: "rgba(0,0,0,0.8)" }}>
         <div style={{ maxWidth: 1000, margin: "0 auto", display: "flex", flexWrap: "wrap", justifyContent: "space-between", gap: 40, paddingBottom: 40 }}>
           
-          <div style={{ flex: "1 1 250px" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
+          {/* Colonna 1: Brand & QR */}
+          <div style={{ flex: "1 1 300px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
               <img 
                 src="/logo.png" 
                 alt="Logo" 
@@ -430,12 +431,13 @@ export default function LandingPage() {
               />
               <span style={{ fontSize: 18, fontWeight: 800, color: "#fff" }}>Creator Life OS</span>
             </div>
-
-            <p style={{ lineHeight: 1.6, marginBottom: 24 }}>L'ecosistema intelligente per creator che vogliono trasformare la propria passione in un vero business.</p>
+            <p style={{ lineHeight: 1.6, marginBottom: 24, maxWidth: 300 }}>
+              L'ecosistema intelligente per creator che vogliono trasformare la propria passione in un vero business.
+            </p>
             <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
               <div style={{ display: "flex", gap: 16 }}>
-                <a href="https://instagram.com/pesoinvisible" target="_blank" rel="noreferrer" style={{ color: "var(--text-secondary)", textDecoration: "none", fontSize: 24, transition: "color 0.2s" }} onMouseOver={e => e.currentTarget.style.color = "#E1306C"} onMouseOut={e => e.currentTarget.style.color = "var(--text-secondary)"}>📱</a>
-                <a href="mailto:liveprodigi@gmail.com" style={{ color: "var(--text-secondary)", textDecoration: "none", fontSize: 24, transition: "color 0.2s" }} onMouseOver={e => e.currentTarget.style.color = "var(--accent-color)"} onMouseOut={e => e.currentTarget.style.color = "var(--text-secondary)"}>✉️</a>
+                <a href="https://instagram.com/pesoinvisible" target="_blank" rel="noreferrer" style={{ fontSize: 24, textDecoration: "none" }}>📱</a>
+                <a href="mailto:liveprodigi@gmail.com" style={{ fontSize: 24, textDecoration: "none" }}>✉️</a>
               </div>
               <div style={{ width: 1, height: 30, background: "rgba(255,255,255,0.1)" }} />
               <div style={{ padding: 4, background: "#fff", borderRadius: 8, width: 60, height: 60, position: "relative" }}>
@@ -443,41 +445,36 @@ export default function LandingPage() {
                 <div style={{ position: "absolute", bottom: -12, left: "50%", transform: "translateX(-50%)", fontSize: 8, color: "var(--text-secondary)", whiteSpace: "nowrap" }}>SCAN ME</div>
               </div>
             </div>
-
-
           </div>
 
+          {/* Colonna 2: Link */}
           <div style={{ flex: "1 1 150px" }}>
-            <h4 style={{ color: "#fff", marginBottom: 24, fontSize: 16, fontWeight: 700 }}>Piattaforma</h4>
-            <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 14 }}>
-              <li><a href="#features" style={{ color: "var(--text-secondary)", textDecoration: "none", transition: "color 0.2s" }}>Caratteristiche</a></li>
-              <li><Link to="/pricing" style={{ color: "var(--text-secondary)", textDecoration: "none", transition: "color 0.2s" }}>Prezzi</Link></li>
-              <li><Link to="/login" style={{ color: "var(--text-secondary)", textDecoration: "none", transition: "color 0.2s" }}>Accedi / Registrati</Link></li>
-            </ul>
+            <h4 style={{ color: "#fff", marginBottom: 20, fontSize: 16, fontWeight: 700 }}>Piattaforma</h4>
+            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              <a href="#features" style={{ color: "inherit", textDecoration: "none" }}>Caratteristiche</a>
+              <Link to="/pricing" style={{ color: "inherit", textDecoration: "none" }}>Prezzi</Link>
+              <Link to="/login" style={{ color: "inherit", textDecoration: "none" }}>Accedi / Registrati</Link>
+            </div>
           </div>
 
+          {/* Colonna 3: Legale */}
           <div style={{ flex: "1 1 150px" }}>
-            <h4 style={{ color: "#fff", marginBottom: 24, fontSize: 16, fontWeight: 700 }}>Legale</h4>
-            <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 14 }}>
-              <li><Link to="/termini" style={{ color: "var(--text-secondary)", textDecoration: "none" }}>Termini di Servizio</Link></li>
-              <li><Link to="/privacy" style={{ color: "var(--text-secondary)", textDecoration: "none" }}>Privacy Policy</Link></li>
-              <li><Link to="/cookie" style={{ color: "var(--text-secondary)", textDecoration: "none" }}>Cookie Policy</Link></li>
-              <li><a href="mailto:liveprodigi@gmail.com?subject=Richiesta%20Dati" style={{ color: "var(--text-secondary)", textDecoration: "none" }}>Gestione Dati (GDPR)</a></li>
-            </ul>
+            <h4 style={{ color: "#fff", marginBottom: 20, fontSize: 16, fontWeight: 700 }}>Legale</h4>
+            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              <Link to="/termini" style={{ color: "inherit", textDecoration: "none" }}>Termini di Servizio</Link>
+              <Link to="/privacy" style={{ color: "inherit", textDecoration: "none" }}>Privacy Policy</Link>
+              <Link to="/cookie" style={{ color: "inherit", textDecoration: "none" }}>Cookie Policy</Link>
+              <a href="mailto:liveprodigi@gmail.com" style={{ color: "inherit", textDecoration: "none" }}>Gestione Dati</a>
+            </div>
           </div>
-
 
         </div>
         
         <div style={{ maxWidth: 1000, margin: "0 auto", display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", paddingTop: 24, borderTop: "1px solid rgba(255,255,255,0.05)", gap: 20 }}>
-          <div>Creator Life OS © {new Date().getFullYear()}. Realizzato da Prodigi Digitali.</div>
-          <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "6px 12px", background: "rgba(255,255,255,0.05)", borderRadius: 20, fontSize: 12 }}>
-              <span>🇮🇹</span> Italiano
-            </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "6px 12px", background: "rgba(255,255,255,0.05)", borderRadius: 20, fontSize: 12 }}>
-              <span>€</span> EUR
-            </div>
+          <div>Creator Life OS © {new Date().getFullYear()}</div>
+          <div style={{ display: "flex", gap: 16 }}>
+            <div style={{ padding: "4px 12px", background: "rgba(255,255,255,0.05)", borderRadius: 20, fontSize: 12 }}>🇮🇹 Italiano</div>
+            <div style={{ padding: "4px 12px", background: "rgba(255,255,255,0.05)", borderRadius: 20, fontSize: 12 }}>€ EUR</div>
           </div>
         </div>
       </footer>

@@ -1,6 +1,11 @@
 User-agent: *
 Allow: /
-Allow: /app
+Allow: /pricing
+Allow: /login
+Allow: /termini
+Allow: /privacy
+Allow: /cookie
+Disallow: /app/
 Disallow: /admin
 Disallow: /api/
 

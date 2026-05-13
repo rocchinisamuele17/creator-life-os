@@ -114,8 +114,8 @@ const LockIcon = () => (
 
 const StarIcon = () => (
   <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-    <circle cx="9" cy="9" r="9" fill="rgba(0,240,255,0.15)" />
-    <path d="M5.5 9.5l2 2 5-5" stroke="#00f0ff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    <circle cx="9" cy="9" r="9" fill="var(--accent-glow)" />
+    <path d="M5.5 9.5l2 2 5-5" stroke="var(--accent-color)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 
@@ -205,9 +205,18 @@ export default function PricingPage() {
       {/* NAV */}
       <nav className={styles.nav}>
         <div className={styles.navInner}>
-          <div className={styles.logo} onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
-            <span className={styles.logoDot} />
-            prodigi.live
+          <div className={styles.logo} onClick={() => navigate('/')} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <img 
+              src="/logo.png" 
+              alt="Prodigi Logo" 
+              style={{ 
+                width: 32, 
+                height: 32, 
+                objectFit: "contain",
+                filter: "drop-shadow(0 0 8px var(--accent-color))"
+              }} 
+            />
+            <span className="text-gradient" style={{ fontSize: '1.2rem', fontWeight: 800 }}>Creator Life OS</span>
           </div>
           <button className={styles.navBack} onClick={() => navigate('/')}>
             Torna alla home
@@ -353,7 +362,7 @@ export default function PricingPage() {
           <p className={styles.bottomSub}>
             Unisciti ai creator che stanno già usando Prodigi per crescere ogni giorno.
           </p>
-          <button className={styles.ctaPro} onClick={() => handleCta('free')} style={{ width: 'auto', padding: '16px 48px' }}>
+          <button className={styles.ctaPro} onClick={() => handleCta('free')} style={{ display: 'inline-block', width: 'auto', padding: '16px 48px' }}>
             Inizia gratis
           </button>
         </div>
@@ -362,9 +371,18 @@ export default function PricingPage() {
       {/* FOOTER */}
       <footer className={styles.footer}>
         <div className={styles.container}>
-          <div className={`${styles.logo} ${styles.centered}`}>
-            <span className={styles.logoDot} />
-            prodigi.live
+          <div className={`${styles.logo} ${styles.centered}`} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+            <img 
+              src="/logo.png" 
+              alt="Prodigi Logo" 
+              style={{ 
+                width: 32, 
+                height: 32, 
+                objectFit: "contain",
+                filter: "drop-shadow(0 0 5px var(--accent-color))"
+              }} 
+            />
+            <span style={{ fontSize: '1.1rem', fontWeight: 800, color: '#fff' }}>Creator Life OS</span>
           </div>
           <p>Creator Life OS v1.0 — Prodigi Digitali &copy; 2026</p>
           <div style={{ marginTop: 20, display: 'flex', justifyContent: 'center', gap: 20, fontSize: '0.8rem' }}>

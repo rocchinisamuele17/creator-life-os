@@ -11,8 +11,8 @@
   --border: rgba(255, 255, 255, 0.06);
   --text: #e0e0e0;
   --text-muted: #777;
-  --accent: #00f0ff;
-  --accent-glow: rgba(0, 240, 255, 0.15);
+  --accent: var(--accent-color);
+  --accent-glow: rgba(var(--accent-rgb, 0, 240, 255), 0.15);
   --green: #00e676;
   --radius: 16px;
 
@@ -34,6 +34,7 @@
   -webkit-backdrop-filter: blur(16px);
   background: rgba(5, 5, 5, 0.7);
   border-bottom: 1px solid var(--border);
+  padding-top: var(--safe-top);
 }
 
 .navInner {
@@ -49,19 +50,10 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-family: 'Space Mono', monospace;
-  font-weight: 700;
+  font-weight: 800;
   font-size: 1.1rem;
   color: #fff;
   letter-spacing: -0.5px;
-}
-
-.logoDot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 10px var(--accent);
 }
 
 .navBack {
@@ -329,6 +321,7 @@
   transition: all 0.3s;
   margin-bottom: 28px;
   font-family: inherit;
+  text-align: center;
 }
 
 .ctaFree:hover {
@@ -351,6 +344,7 @@
   margin-bottom: 8px;
   font-family: inherit;
   box-shadow: 0 0 20px rgba(0, 240, 255, 0.25);
+  text-align: center;
 }
 
 .ctaPro:hover {

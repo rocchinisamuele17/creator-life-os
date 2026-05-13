@@ -10,8 +10,8 @@ export function Header() {
           width: 50, 
           height: 50, 
           objectFit: "contain",
-          filter: "invert(1) brightness(1.5) drop-shadow(0 0 5px var(--accent-color))",
-          animation: "pulse-glow 2s infinite ease-in-out"
+          filter: "drop-shadow(0 0 10px var(--accent-color))",
+          animation: "pulse-glow 3s infinite ease-in-out"
         }} 
         onError={(e) => {
           e.currentTarget.style.display = 'none';

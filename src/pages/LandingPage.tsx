@@ -74,11 +74,11 @@ export default function LandingPage() {
               src="/logo.png" 
               alt="Prodigi Logo" 
               style={{ 
-                width: 50, 
-                height: 50, 
+                width: 60, 
+                height: 60, 
                 objectFit: "contain",
-                filter: "invert(1) brightness(1.5) drop-shadow(0 0 5px var(--accent-color))",
-                animation: "pulse-glow 2s infinite ease-in-out"
+                filter: "drop-shadow(0 0 10px var(--accent-color))",
+                animation: "pulse-glow 3s infinite ease-in-out"
               }} 
             onError={(e) => {
               e.currentTarget.style.display = 'none';
@@ -427,7 +427,7 @@ export default function LandingPage() {
               <img 
                 src="/logo.png" 
                 alt="Logo" 
-                style={{ width: 40, height: 40, objectFit: "contain", filter: "invert(1) brightness(1.5) drop-shadow(0 0 5px var(--accent-color))" }} 
+                style={{ width: 40, height: 40, objectFit: "contain", filter: "drop-shadow(0 0 5px var(--accent-color))" }} 
               />
               <span style={{ fontSize: 18, fontWeight: 800, color: "#fff" }}>Creator Life OS</span>
             </div>

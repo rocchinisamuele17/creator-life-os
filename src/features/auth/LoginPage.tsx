@@ -65,8 +65,9 @@ export function LoginPage() {
 
           <div className={styles.cardHeader}>
             <div className={styles.iconWrap}>
-              <img src="/logo.png" alt="Logo" style={{ width: 48, height: 48, filter: "invert(1) brightness(1.5) drop-shadow(0 0 5px #00f0ff)" }} />
+              <img src="/logo.png" alt="Logo" style={{ width: 56, height: 56, filter: "drop-shadow(0 0 8px #00f0ff)" }} />
             </div>
+
 
 
             <h1 className={styles.title}>

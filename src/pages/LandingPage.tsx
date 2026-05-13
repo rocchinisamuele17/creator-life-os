@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "../lib/supabase";
+import logoSrc from "../assets/logo.jpg";
 
 export default function LandingPage() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -71,19 +72,16 @@ export default function LandingPage() {
       <nav className="landing-nav">
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <img 
-              src="/logo.png" 
+              src={logoSrc} 
               alt="Prodigi Logo" 
               style={{ 
                 width: 60, 
                 height: 60, 
                 objectFit: "contain",
+                borderRadius: "12px",
                 filter: "drop-shadow(0 0 10px var(--accent-color))",
                 animation: "pulse-glow 3s infinite ease-in-out"
               }} 
-            onError={(e) => {
-              e.currentTarget.style.display = 'none';
-              e.currentTarget.parentElement!.insertAdjacentHTML('afterbegin', '<div class="animate-glow" style="width: 36px; height: 36px; borderRadius: 8px; background: var(--accent-gradient); display: flex; alignItems: center; justifyContent: center; fontSize: 18px">⚡</div>');
-            }}
           />
           <span className="text-gradient" style={{ fontSize: 20, fontWeight: 800 }}>Creator Life OS</span>
         </div>
@@ -425,9 +423,9 @@ export default function LandingPage() {
           <div style={{ flex: "1 1 300px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
               <img 
-                src="/logo.png" 
+                src={logoSrc} 
                 alt="Logo" 
-                style={{ width: 40, height: 40, objectFit: "contain", filter: "drop-shadow(0 0 5px var(--accent-color))" }} 
+                style={{ width: 40, height: 40, objectFit: "contain", borderRadius: "8px", filter: "drop-shadow(0 0 5px var(--accent-color))" }} 
               />
               <span style={{ fontSize: 18, fontWeight: 800, color: "#fff" }}>Creator Life OS</span>
             </div>

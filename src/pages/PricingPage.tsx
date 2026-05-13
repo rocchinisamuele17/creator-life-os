@@ -205,18 +205,26 @@ export default function PricingPage() {
       {/* NAV */}
       <nav className={styles.nav}>
         <div className={styles.navInner}>
-          <div className={styles.logo} onClick={() => navigate('/')} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div className={styles.logo} onClick={() => navigate('/')} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px' }}>
             <img 
               src="/logo.png" 
               alt="Prodigi Logo" 
               style={{ 
-                width: 32, 
-                height: 32, 
-                objectFit: "contain",
-                filter: "drop-shadow(0 0 8px var(--accent-color))"
+                width: 36, 
+                height: 36, 
+                objectFit: "cover",
+                borderRadius: "10px",
+                filter: "drop-shadow(0 0 8px rgba(0,240,255,0.5))"
               }} 
             />
-            <span className="text-gradient" style={{ fontSize: '1.2rem', fontWeight: 800 }}>Creator Life OS</span>
+            <span style={{ 
+              fontSize: '1.1rem', 
+              fontWeight: 800, 
+              background: 'linear-gradient(135deg, #00f0ff 0%, #7000ff 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text'
+            }}>Creator Life OS</span>
           </div>
           <button className={styles.navBack} onClick={() => navigate('/')}>
             Torna alla home
@@ -371,18 +379,26 @@ export default function PricingPage() {
       {/* FOOTER */}
       <footer className={styles.footer}>
         <div className={styles.container}>
-          <div className={`${styles.logo} ${styles.centered}`} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+          <div className={`${styles.logo} ${styles.centered}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', marginBottom: '16px' }}>
             <img 
               src="/logo.png" 
               alt="Prodigi Logo" 
               style={{ 
-                width: 32, 
-                height: 32, 
-                objectFit: "contain",
-                filter: "drop-shadow(0 0 5px var(--accent-color))"
+                width: 36, 
+                height: 36, 
+                objectFit: "cover",
+                borderRadius: "10px",
+                filter: "drop-shadow(0 0 5px rgba(0,240,255,0.4))"
               }} 
             />
-            <span style={{ fontSize: '1.1rem', fontWeight: 800, color: '#fff' }}>Creator Life OS</span>
+            <span style={{ 
+              fontSize: '1.1rem', 
+              fontWeight: 800, 
+              background: 'linear-gradient(135deg, #00f0ff 0%, #7000ff 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text'
+            }}>Creator Life OS</span>
           </div>
           <p>Creator Life OS v1.0 — Prodigi Digitali &copy; 2026</p>
           <div style={{ marginTop: 20, display: 'flex', justifyContent: 'center', gap: 20, fontSize: '0.8rem' }}>

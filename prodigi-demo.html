@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prodigi.live — Creator Life OS Demo</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050505;
+    --cyan: #00f0ff;
+    --white: #ffffff;
+    --silver: rgba(255,255,255,0.6);
+    --border: rgba(255,255,255,0.08);
+    --grad: linear-gradient(135deg, #00f0ff 0%, #0072ff 100%);
+    --glass: rgba(255,255,255,0.03);
+    --glow: 0 0 40px rgba(0,240,255,0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: 'DM Mono', monospace;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    width: 12px; height: 12px;
+    background: var(--cyan);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.1s ease;
+    box-shadow: 0 0 20px var(--cyan);
+    mix-blend-mode: screen;
+  }
+  .cursor-ring {
+    width: 40px; height: 40px;
+    border: 1px solid rgba(0,240,255,0.4);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    transition: all 0.15s ease;
+  }
+
+  /* Grid background */
+  .grid-bg {
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,240,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,240,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Glow orbs */
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.12;
+  }
+  .orb-1 { width: 600px; height: 600px; background: #00f0ff; top: -200px; left: -200px; animation: drift 12s ease-in-out infinite alternate; }
+  .orb-2 { width: 400px; height: 400px; background: #0072ff; bottom: -100px; right: -100px; animation: drift 15s ease-in-out infinite alternate-reverse; }
+
+  @keyframes drift {
+    from { transform: translate(0, 0); }
+    to { transform: translate(60px, 40px); }
+  }
+
+  /* Nav */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 48px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(5,5,5,0.8);
+    backdrop-filter: blur(20px);
+  }
+
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 20px;
+    background: var(--grad);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+  }
+
+  .nav-badge {
+    font-size: 11px;
+    color: var(--cyan);
+    border: 1px solid rgba(0,240,255,0.3);
+    padding: 4px 12px;
+    border-radius: 20px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    animation: pulse-border 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-border {
+    0%, 100% { border-color: rgba(0,240,255,0.3); box-shadow: none; }
+    50% { border-color: rgba(0,240,255,0.7); box-shadow: 0 0 12px rgba(0,240,255,0.2); }
+  }
+
+  .nav-cta {
+    background: var(--grad);
+    color: #000;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 6px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: none;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+    display: inline-block;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+  .nav-cta:hover { opacity: 0.85; transform: translateY(-1px); }
+
+  /* Hero */
+  .hero {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 120px 24px 60px;
+  }
+
+  .hero-tag {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.2s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(48px, 8vw, 96px);
+    line-height: 1;
+    letter-spacing: -3px;
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.4s forwards;
+  }
+
+  .hero-title .grad-text {
+    background: var(--grad);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero-sub {
+    font-size: 16px;
+    color: var(--silver);
+    max-width: 520px;
+    line-height: 1.8;
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.6s forwards;
+  }
+
+  .hero-cta-group {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.8s forwards;
+  }
+
+  .btn-primary {
+    background: var(--grad);
+    color: #000;
+    padding: 14px 32px;
+    border-radius: 6px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    text-decoration: none;
+    letter-spacing: 0.5px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: none;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,240,255,0.3); }
+
+  .btn-ghost {
+    color: var(--silver);
+    padding: 14px 32px;
+    border-radius: 6px;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    transition: border-color 0.2s, color 0.2s;
+    cursor: none;
+  }
+  .btn-ghost:hover { border-color: rgba(255,255,255,0.2); color: var(--white); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Stats bar */
+  .stats-bar {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    gap: 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .stat-item {
+    flex: 1;
+    padding: 28px 40px;
+    border-right: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s;
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-item:hover { background: var(--glass); }
+
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 36px;
+    background: var(--grad);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -1px;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: var(--silver);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  /* Demo section */
+  .demo-section {
+    position: relative;
+    z-index: 1;
+    padding: 100px 48px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 60px;
+  }
+
+  .section-tag {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(32px, 5vw, 56px);
+    letter-spacing: -2px;
+    line-height: 1.1;
+  }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 6px;
+    margin-bottom: 32px;
+    overflow-x: auto;
+  }
+
+  .tab {
+    flex: 1;
+    padding: 10px 16px;
+    border-radius: 6px;
+    border: none;
+    background: transparent;
+    color: var(--silver);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    cursor: none;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+
+  .tab.active {
+    background: var(--grad);
+    color: #000;
+    font-weight: 500;
+  }
+
+  .tab:not(.active):hover { color: var(--white); background: rgba(255,255,255,0.05); }
+
+  /* Dashboard panel */
+  .dashboard {
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: rgba(255,255,255,0.02);
+    backdrop-filter: blur(20px);
+    overflow: hidden;
+    box-shadow: var(--glow);
+  }
+
+  .dash-header {
+    padding: 20px 28px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .dash-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+  }
+
+  .dash-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--cyan);
+  }
+
+  .dot {
+    width: 8px; height: 8px;
+    background: var(--cyan);
+    border-radius: 50%;
+    animation: blink 1.5s ease-in-out infinite;
+    box-shadow: 0 0 8px var(--cyan);
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .dash-body {
+    padding: 28px;
+    display: none;
+    animation: fadeIn 0.4s ease;
+  }
+  .dash-body.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Dashboard grid */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  .metric-card {
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+  .metric-card:hover { border-color: rgba(0,240,255,0.2); }
+
+  .metric-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--grad);
+    opacity: 0.6;
+  }
+
+  .metric-icon { font-size: 18px; margin-bottom: 12px; }
+  .metric-val {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 28px;
+    letter-spacing: -1px;
+    counter-reset: num;
+  }
+  .metric-change {
+    font-size: 11px;
+    color: #00ff88;
+    margin-top: 4px;
+  }
+  .metric-label {
+    font-size: 11px;
+    color: var(--silver);
+    margin-top: 2px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* Chart */
+  .chart-area {
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+
+  .chart-label {
+    font-size: 12px;
+    color: var(--silver);
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .chart-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    height: 100px;
+  }
+
+  .bar {
+    flex: 1;
+    border-radius: 4px 4px 0 0;
+    position: relative;
+    cursor: none;
+    transition: opacity 0.2s;
+    background: linear-gradient(to top, #0072ff, #00f0ff);
+  }
+  .bar:hover { opacity: 0.8; }
+  .bar::after {
+    content: attr(data-val);
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 10px;
+    color: var(--cyan);
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .bar:hover::after { opacity: 1; }
+
+  /* Two col */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  /* Content machine */
+  .content-list { display: flex; flex-direction: column; gap: 12px; }
+  .content-item {
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .content-item:hover { border-color: rgba(0,240,255,0.2); transform: translateX(4px); }
+
+  .platform-badge {
+    font-size: 10px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    min-width: 70px;
+    text-align: center;
+  }
+  .tiktok { background: rgba(255,0,80,0.15); color: #ff0050; border: 1px solid rgba(255,0,80,0.2); }
+  .youtube { background: rgba(255,0,0,0.1); color: #ff4444; border: 1px solid rgba(255,0,0,0.2); }
+  .instagram { background: rgba(193,53,132,0.15); color: #c13584; border: 1px solid rgba(193,53,132,0.2); }
+
+  .content-info { flex: 1; }
+  .content-title { font-size: 13px; margin-bottom: 4px; }
+  .content-meta { font-size: 11px; color: var(--silver); }
+
+  .status-badge {
+    font-size: 10px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .scheduled { background: rgba(0,240,255,0.1); color: var(--cyan); border: 1px solid rgba(0,240,255,0.2); }
+  .draft { background: rgba(255,255,255,0.05); color: var(--silver); border: 1px solid var(--border); }
+  .live { background: rgba(0,255,136,0.1); color: #00ff88; border: 1px solid rgba(0,255,136,0.2); }
+
+  /* Money tracker */
+  .income-breakdown { display: flex; flex-direction: column; gap: 12px; }
+  .income-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .income-label { font-size: 12px; color: var(--silver); min-width: 120px; }
+  .income-bar-wrap { flex: 1; height: 6px; background: rgba(255,255,255,0.05); border-radius: 3px; overflow: hidden; }
+  .income-bar-fill { height: 100%; border-radius: 3px; background: var(--grad); transition: width 1s ease; }
+  .income-amount { font-size: 12px; color: var(--white); min-width: 70px; text-align: right; font-family: 'Syne', sans-serif; font-weight: 700; }
+
+  /* Brand deals */
+  .deal-list { display: flex; flex-direction: column; gap: 10px; }
+  .deal-item {
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: border-color 0.2s;
+  }
+  .deal-item:hover { border-color: rgba(0,240,255,0.2); }
+
+  .deal-brand { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; }
+  .deal-type { font-size: 11px; color: var(--silver); margin-top: 2px; }
+  .deal-value { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .deal-stage {
+    font-size: 10px; padding: 4px 10px; border-radius: 4px; letter-spacing: 1px; text-transform: uppercase;
+  }
+  .negotiating { background: rgba(255,200,0,0.1); color: #ffc800; border: 1px solid rgba(255,200,0,0.2); }
+  .signed { background: rgba(0,255,136,0.1); color: #00ff88; border: 1px solid rgba(0,255,136,0.2); }
+  .pending { background: rgba(0,240,255,0.1); color: var(--cyan); border: 1px solid rgba(0,240,255,0.2); }
+
+  /* Habits */
+  .habit-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .habit-card {
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    transition: border-color 0.2s;
+  }
+  .habit-card:hover { border-color: rgba(0,240,255,0.2); }
+  .habit-name { font-size: 13px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .habit-dots { display: flex; gap: 5px; flex-wrap: wrap; }
+  .habit-dot {
+    width: 12px; height: 12px; border-radius: 2px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border);
+  }
+  .habit-dot.done { background: var(--grad); border-color: transparent; }
+  .habit-streak { font-size: 11px; color: var(--cyan); margin-top: 10px; }
+
+  /* CTA section */
+  .cta-section {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 100px 48px;
+    border-top: 1px solid var(--border);
+  }
+
+  .cta-section h2 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(36px, 6vw, 72px);
+    letter-spacing: -2px;
+    line-height: 1.1;
+    margin-bottom: 24px;
+  }
+
+  .cta-section p {
+    color: var(--silver);
+    font-size: 15px;
+    max-width: 440px;
+    margin: 0 auto 40px;
+    line-height: 1.8;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: rgba(0,240,255,0.3); border-radius: 2px; }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    .demo-section { padding: 60px 24px; }
+    .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+    .two-col { grid-template-columns: 1fr; }
+    .habit-grid { grid-template-columns: 1fr; }
+    .stats-bar { flex-direction: column; }
+    .stat-item { border-right: none; border-bottom: 1px solid var(--border); }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="grid-bg"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">prodigi.live</div>
+  <div class="nav-badge">LIVE DEMO</div>
+  <a href="https://prodigi.live" target="_blank" class="nav-cta">Visit Site →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-tag">Creator Life OS · Interactive Demo</div>
+  <h1 class="hero-title">
+    Built for creators<br><span class="grad-text">who mean business.</span>
+  </h1>
+  <p class="hero-sub">The all-in-one operating system for content creators. Manage your content, money, brand deals, and habits — in one single ecosystem.</p>
+  <div class="hero-cta-group">
+    <a href="https://prodigi.live" target="_blank" class="btn-primary">Get Started Free</a>
+    <a href="#demo" class="btn-ghost">Explore Demo ↓</a>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <div class="stat-num" data-target="12">0</div>
+    <div class="stat-label">Platforms Managed</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num" data-target="5" data-prefix="" data-suffix=" Tools">0</div>
+    <div class="stat-label">Integrated Features</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num" data-target="100" data-prefix="" data-suffix="%">0</div>
+    <div class="stat-label">Built for Creators</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num" data-target="1" data-suffix=" OS">0</div>
+    <div class="stat-label">System to Rule Them All</div>
+  </div>
+</div>
+
+<!-- DEMO -->
+<section class="demo-section" id="demo">
+  <div class="section-header">
+    <div class="section-tag">Interactive Preview</div>
+    <h2 class="section-title">Your entire career,<br><span style="background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">one dashboard.</span></h2>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('dashboard', this)">📊 Dashboard</button>
+    <button class="tab" onclick="switchTab('content', this)">📹 Content Machine</button>
+    <button class="tab" onclick="switchTab('money', this)">💰 Money Tracker</button>
+    <button class="tab" onclick="switchTab('deals', this)">🤝 Brand Deals</button>
+    <button class="tab" onclick="switchTab('habits', this)">📅 Habit Tracker</button>
+  </div>
+
+  <div class="dashboard">
+    <div class="dash-header">
+      <div class="dash-title" id="dash-title">Analytics Dashboard</div>
+      <div class="dash-status"><div class="dot"></div>Live Data</div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div class="dash-body active" id="tab-dashboard">
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-icon">👁️</div>
+          <div class="metric-val">2.4M</div>
+          <div class="metric-change">↑ 18% this week</div>
+          <div class="metric-label">Total Views</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon">👥</div>
+          <div class="metric-val">148K</div>
+          <div class="metric-change">↑ 4.2K new</div>
+          <div class="metric-label">Followers</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon">💸</div>
+          <div class="metric-val">€8,200</div>
+          <div class="metric-change">↑ 23% vs last month</div>
+          <div class="metric-label">Monthly Revenue</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon">📋</div>
+          <div class="metric-val">12</div>
+          <div class="metric-change">3 pending signature</div>
+          <div class="metric-label">Active Deals</div>
+        </div>
+      </div>
+      <div class="chart-area">
+        <div class="chart-label">Views this month</div>
+        <div class="chart-bars" id="mainChart"></div>
+      </div>
+    </div>
+
+    <!-- CONTENT MACHINE -->
+    <div class="dash-body" id="tab-content">
+      <div class="content-list">
+        <div class="content-item">
+          <div class="platform-badge tiktok">TikTok</div>
+          <div class="content-info">
+            <div class="content-title">How I make €5K/month as a creator</div>
+            <div class="content-meta">Scheduled · Tomorrow 14:00</div>
+          </div>
+          <div class="status-badge scheduled">Scheduled</div>
+        </div>
+        <div class="content-item">
+          <div class="platform-badge youtube">YouTube</div>
+          <div class="content-info">
+            <div class="content-title">Full Creator OS Walkthrough (30 min)</div>
+            <div class="content-meta">Draft · Due Friday</div>
+          </div>
+          <div class="status-badge draft">Draft</div>
+        </div>
+        <div class="content-item">
+          <div class="platform-badge instagram">Instagram</div>
+          <div class="content-info">
+            <div class="content-title">Behind the scenes: brand deal day</div>
+            <div class="content-meta">Posted 2h ago · 12.4K views</div>
+          </div>
+          <div class="status-badge live">Live</div>
+        </div>
+        <div class="content-item">
+          <div class="platform-badge tiktok">TikTok</div>
+          <div class="content-info">
+            <div class="content-title">Productivity routine for creators</div>
+            <div class="content-meta">Scheduled · Thursday 18:30</div>
+          </div>
+          <div class="status-badge scheduled">Scheduled</div>
+        </div>
+        <div class="content-item">
+          <div class="platform-badge youtube">YouTube</div>
+          <div class="content-info">
+            <div class="content-title">I tracked every hour for 30 days</div>
+            <div class="content-meta">Draft · Outline ready</div>
+          </div>
+          <div class="status-badge draft">Draft</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MONEY TRACKER -->
+    <div class="dash-body" id="tab-money">
+      <div class="two-col">
+        <div>
+          <div class="chart-area">
+            <div class="chart-label">Revenue breakdown — May 2025</div>
+            <div class="income-breakdown">
+              <div class="income-row">
+                <div class="income-label">Brand Deals</div>
+                <div class="income-bar-wrap"><div class="income-bar-fill" style="width:72%"></div></div>
+                <div class="income-amount">€5,900</div>
+              </div>
+              <div class="income-row">
+                <div class="income-label">AdSense</div>
+                <div class="income-bar-wrap"><div class="income-bar-fill" style="width:28%"></div></div>
+                <div class="income-amount">€1,300</div>
+              </div>
+              <div class="income-row">
+                <div class="income-label">Subscriptions</div>
+                <div class="income-bar-wrap"><div class="income-bar-fill" style="width:15%"></div></div>
+                <div class="income-amount">€700</div>
+              </div>
+              <div class="income-row">
+                <div class="income-label">Merchandise</div>
+                <div class="income-bar-wrap"><div class="income-bar-fill" style="width:8%"></div></div>
+                <div class="income-amount">€300</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="chart-area" style="height:100%">
+            <div class="chart-label">Growth Simulator</div>
+            <div style="margin-top:16px">
+              <div class="metric-card" style="margin-bottom:12px">
+                <div class="metric-label">Projected — 3 months</div>
+                <div class="metric-val" style="font-size:32px;font-family:'Syne',sans-serif;font-weight:800;">€14,200</div>
+                <div class="metric-change">+73% at current growth rate</div>
+              </div>
+              <div style="font-size:11px;color:var(--silver);line-height:1.8;">
+                Based on your last 90 days of data, Prodigi AI predicts your revenue will grow by <span style="color:var(--cyan)">73%</span> if you maintain your current posting schedule and brand deal frequency.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BRAND DEALS -->
+    <div class="dash-body" id="tab-deals">
+      <div class="deal-list">
+        <div class="deal-item">
+          <div>
+            <div class="deal-brand">NordVPN</div>
+            <div class="deal-type">YouTube Integration · 60s</div>
+          </div>
+          <div class="deal-value">€3,200</div>
+          <div class="deal-stage signed">Signed</div>
+        </div>
+        <div class="deal-item">
+          <div>
+            <div class="deal-brand">Notion</div>
+            <div class="deal-type">TikTok Series · 3 videos</div>
+          </div>
+          <div class="deal-value">€1,800</div>
+          <div class="deal-stage negotiating">Negotiating</div>
+        </div>
+        <div class="deal-item">
+          <div>
+            <div class="deal-brand">Adobe Creative</div>
+            <div class="deal-type">Instagram + YouTube</div>
+          </div>
+          <div class="deal-value">€4,500</div>
+          <div class="deal-stage pending">Pending</div>
+        </div>
+        <div class="deal-item">
+          <div>
+            <div class="deal-brand">Skillshare</div>
+            <div class="deal-type">YouTube Sponsor · 30s</div>
+          </div>
+          <div class="deal-value">€900</div>
+          <div class="deal-stage signed">Signed</div>
+        </div>
+        <div class="deal-item">
+          <div>
+            <div class="deal-brand">Epidemic Sound</div>
+            <div class="deal-type">Affiliate Partnership</div>
+          </div>
+          <div class="deal-value">€600</div>
+          <div class="deal-stage negotiating">Negotiating</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HABITS -->
+    <div class="dash-body" id="tab-habits">
+      <div class="habit-grid">
+        <div class="habit-card">
+          <div class="habit-name">📹 Film content</div>
+          <div class="habit-dots" id="dots-1"></div>
+          <div class="habit-streak">🔥 14 day streak</div>
+        </div>
+        <div class="habit-card">
+          <div class="habit-name">📧 Reply to DMs</div>
+          <div class="habit-dots" id="dots-2"></div>
+          <div class="habit-streak">🔥 7 day streak</div>
+        </div>
+        <div class="habit-card">
+          <div class="habit-name">📚 Learn & research</div>
+          <div class="habit-dots" id="dots-3"></div>
+          <div class="habit-streak">🔥 21 day streak</div>
+        </div>
+        <div class="habit-card">
+          <div class="habit-name">💪 Workout</div>
+          <div class="habit-dots" id="dots-4"></div>
+          <div class="habit-streak">🔥 5 day streak</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2>Ready to take<br><span style="background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">control?</span></h2>
+  <p>Join the next generation of professional content creators. One system. Total control.</p>
+  <a href="https://prodigi.live" target="_blank" class="btn-primary" style="font-size:16px;padding:16px 48px;">Start with Prodigi →</a>
+</section>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx - 6 + 'px';
+    cursor.style.top = my - 6 + 'px';
+  });
+  function animateRing() {
+    rx += (mx - rx - 20) * 0.12;
+    ry += (my - ry - 20) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  // Tabs
+  const tabTitles = {
+    dashboard: 'Analytics Dashboard',
+    content: 'Content Machine AI',
+    money: 'Money Tracker & Growth Simulator',
+    deals: 'Brand Deals Manager',
+    habits: 'Routine & Habit Tracker'
+  };
+
+  function switchTab(name, btn) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.dash-body').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + name).classList.add('active');
+    document.getElementById('dash-title').textContent = tabTitles[name];
+  }
+
+  // Chart bars
+  const vals = [340, 520, 480, 610, 390, 720, 680, 810, 560, 740, 890, 950, 820, 670, 780, 920, 1100, 980, 860, 1040, 1200, 1080, 940, 1150, 1300, 1180, 1050, 1240, 1380, 1420];
+  const max = Math.max(...vals);
+  const chart = document.getElementById('mainChart');
+  vals.forEach(v => {
+    const bar = document.createElement('div');
+    bar.className = 'bar';
+    bar.style.height = (v / max * 100) + '%';
+    bar.setAttribute('data-val', (v / 1000).toFixed(1) + 'K');
+    chart.appendChild(bar);
+  });
+
+  // Habit dots
+  function buildDots(id, doneCount, total = 21) {
+    const container = document.getElementById(id);
+    for (let i = 0; i < total; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'habit-dot' + (i < doneCount ? ' done' : '');
+      container.appendChild(dot);
+    }
+  }
+  buildDots('dots-1', 14);
+  buildDots('dots-2', 7);
+  buildDots('dots-3', 21);
+  buildDots('dots-4', 5);
+
+  // Counter animation
+  function animateCounter(el, target, suffix = '', prefix = '') {
+    let current = 0;
+    const step = target / 60;
+    const timer = setInterval(() => {
+      current += step;
+      if (current >= target) { current = target; clearInterval(timer); }
+      el.textContent = prefix + Math.floor(current) + suffix;
+    }, 16);
+  }
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        document.querySelectorAll('.stat-num').forEach(el => {
+          const target = parseInt(el.dataset.target);
+          const suffix = el.dataset.suffix || '';
+          const prefix = el.dataset.prefix || '';
+          animateCounter(el, target, suffix, prefix);
+        });
+        observer.disconnect();
+      }
+    });
+  }, { threshold: 0.5 });
+
+  observer.observe(document.querySelector('.stats-bar'));
+</script>
+</body>
+</html>

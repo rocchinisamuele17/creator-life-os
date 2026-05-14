@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback, useMemo } from "react";
+import { useAuth } from "../../context/AuthContext";
 
 /* ──────────────────────── Types ──────────────────────── */
 interface SettingsProps {
@@ -91,6 +92,7 @@ function todayStr() {
 
 /* ──────────────────────── Component ──────────────────────── */
 export function Settings({ state, setState, showToast }: SettingsProps) {
+  const { user } = useAuth();
   const currentTheme: ThemeKey = state.settings?.theme || "cyan";
   const background: BackgroundConfig = state.settings?.background || { type: "default", value: "" };
   const calendarEvents: CalendarEvent[] = state.settings?.calendarEvents || [];
@@ -138,13 +140,57 @@ export function Settings({ state, setState, showToast }: SettingsProps) {
   const today = todayStr();
 
   const eventsForDate = useMemo(() => {
-    const map: Record<string, CalendarEvent[]> = {};
-    calendarEvents.forEach((ev) => {
-      if (!map[ev.date]) map[ev.date] = [];
-      map[ev.date].push(ev);
+    const map: Record<string, any[]> = {};
+    const year = calYear;
+
+    // Helper to normalize "DD MMM" to "YYYY-MM-DD"
+    const normalizeDate = (dateStr: string) => {
+      if (!dateStr || dateStr === "—") return null;
+      if (dateStr.includes("-")) return dateStr; // Already YYYY-MM-DD
+      
+      // Mappa mesi IT -> EN per il parsing
+      const monthsIT: Record<string, string> = {
+        'Gen': 'Jan', 'Feb': 'Feb', 'Mar': 'Mar', 'Apr': 'Apr', 'Mag': 'May', 'Giu': 'Jun',
+        'Lug': 'Jul', 'Ago': 'Aug', 'Set': 'Sep', 'Ott': 'Oct', 'Nov': 'Nov', 'Dic': 'Dec'
+      };
+
+      let processedDate = dateStr;
+      Object.keys(monthsIT).forEach(it => {
+        if (dateStr.includes(it)) processedDate = dateStr.replace(it, monthsIT[it]);
+      });
+
+      const d = new Date(`${processedDate} ${year}`);
+      if (isNaN(d.getTime())) return null;
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+    };
+
+    // 1. Content Machine
+    state.content?.forEach(c => {
+      const d = normalizeDate(c.date);
+      if (d) {
+        if (!map[d]) map[d] = [];
+        map[d].push({ ...c, type: 'content', color: '#00f0ff' });
+      }
     });
+
+    // 2. Brand Deals
+    state.brands?.forEach(b => {
+      const d = normalizeDate(b.deadline);
+      if (d) {
+        if (!map[d]) map[d] = [];
+        map[d].push({ ...b, type: 'brand', color: '#f97316' });
+      }
+    });
+
+    // 3. Custom Events
+    calendarEvents.forEach((ev) => {
+      const d = ev.date;
+      if (!map[d]) map[d] = [];
+      map[d].push({ ...ev, type: 'custom', color: 'var(--accent-color)' });
+    });
+
     return map;
-  }, [calendarEvents]);
+  }, [state.content, state.brands, calendarEvents, calYear]);
 
   const selectedEvents = selectedDate ? eventsForDate[selectedDate] || [] : [];
 
@@ -227,13 +273,121 @@ export function Settings({ state, setState, showToast }: SettingsProps) {
 
       {activeSection === "calendar" && (
         <div className="glass-panel" style={{ padding: 24 }}>
-          <h3 style={{ marginBottom: 16 }}>Calendario</h3>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: 4 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+            <h3>Calendario</h3>
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <button 
+                onClick={() => {
+                  if (calMonth === 0) {
+                    setCalMonth(11);
+                    setCalYear(prev => prev - 1);
+                  } else {
+                    setCalMonth(prev => prev - 1);
+                  }
+                }}
+                style={navArrowStyle}
+              >
+                ◀
+              </button>
+              <div style={{ fontSize: 14, fontWeight: "bold", color: "var(--accent-color)", minWidth: 100, textAlign: "center" }}>
+                {MONTHS_IT[calMonth]} {calYear}
+              </div>
+              <button 
+                onClick={() => {
+                  if (calMonth === 11) {
+                    setCalMonth(0);
+                    setCalYear(prev => prev + 1);
+                  } else {
+                    setCalMonth(prev => prev + 1);
+                  }
+                }}
+                style={navArrowStyle}
+              >
+                ▶
+              </button>
+            </div>
+          </div>
+          
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: 4, marginBottom: 24 }}>
             {DAYS_IT.map(d => <div key={d} style={{ textAlign: "center", fontSize: 10, color: "#555" }}>{d}</div>)}
             {Array.from({ length: firstDay }).map((_, i) => <div key={i} />)}
-            {Array.from({ length: daysInMonth }).map((_, i) => (
-              <div key={i} style={{ height: 40, border: "1px solid #222", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, borderRadius: 4, background: (i + 1) === new Date().getDate() ? "var(--accent-color)" : "transparent", color: (i + 1) === new Date().getDate() ? "#000" : "#fff" }}>{i + 1}</div>
-            ))}
+            {Array.from({ length: daysInMonth }).map((_, i) => {
+              const d = i + 1;
+              const dateStr = formatDate(calYear, calMonth, d);
+              const hasEvents = eventsForDate[dateStr]?.length > 0;
+              const isToday = dateStr === today;
+              
+              return (
+                <div 
+                  key={i} 
+                  style={{ 
+                    height: 46, 
+                    border: "1px solid #222", 
+                    display: "flex", 
+                    flexDirection: "column",
+                    alignItems: "center", 
+                    justifyContent: "center", 
+                    fontSize: 12, 
+                    borderRadius: 4, 
+                    background: isToday ? "rgba(0, 240, 255, 0.1)" : "transparent", 
+                    color: isToday ? "var(--accent-color)" : "#fff",
+                    position: "relative"
+                  }}
+                >
+                  {d}
+                  {hasEvents && (
+                    <div style={{ display: "flex", gap: 2, marginTop: 2 }}>
+                      {eventsForDate[dateStr].slice(0, 3).map((ev, idx) => (
+                        <div key={idx} style={{ width: 4, height: 4, borderRadius: "50%", background: ev.color || "var(--accent-color)" }} />
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          <div style={{ borderTop: "1px solid #222", paddingTop: 20 }}>
+            <h4 style={{ marginBottom: 12, fontSize: 14 }}>🔄 Sincronizzazione Esterna</h4>
+            <p style={{ fontSize: 12, color: "#888", marginBottom: 16 }}>
+              Copia questo link e incollalo su Google Calendar o Apple Calendar per vedere i tuoi impegni Prodigi sul telefono.
+            </p>
+            <div style={{ display: "flex", gap: 8 }}>
+              <input 
+                readOnly 
+                value={user ? `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/calendar-feed?user_id=${user.id}&token=fe7c4a294b7264a1cae0eed24aa119ca50845bfbd1c37262c34e674cfae194c2` : "Accedi per vedere il link"}
+                style={{ 
+                  flex: 1, 
+                  background: "#111", 
+                  border: "1px solid #333", 
+                  borderRadius: 6, 
+                  padding: "8px 12px", 
+                  color: "#00f0ff", 
+                  fontSize: 12,
+                  fontFamily: "monospace"
+                }} 
+              />
+              <button 
+                onClick={() => {
+                  if (user) {
+                    navigator.clipboard.writeText(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/calendar-feed?user_id=${user.id}&token=fe7c4a294b7264a1cae0eed24aa119ca50845bfbd1c37262c34e674cfae194c2`);
+                    showToast("Link copiato!", "success");
+                  }
+                }}
+                style={{ 
+                  padding: "8px 12px", 
+                  borderRadius: 6, 
+                  background: "var(--accent-color)", 
+                  color: "#000", 
+                  border: "none", 
+                  fontWeight: "bold", 
+                  cursor: "pointer",
+                  fontSize: 12
+                }}
+              >
+                Copia
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -274,4 +428,17 @@ export function Settings({ state, setState, showToast }: SettingsProps) {
 }
 
 const navBtnStyle = { padding: "8px 16px", borderRadius: 8, border: "1px solid #333", background: "#111", color: "#fff", cursor: "pointer" };
+const navArrowStyle = { 
+  background: "rgba(255,255,255,0.05)", 
+  border: "1px solid #333", 
+  borderRadius: "50%", 
+  width: 32, 
+  height: 32, 
+  display: "flex", 
+  alignItems: "center", 
+  justifyContent: "center", 
+  color: "#fff", 
+  cursor: "pointer",
+  fontSize: 10
+};
 const dataBtnStyle = { width: "100%", padding: "15px", borderRadius: 10, border: "1px solid #333", background: "#111", color: "#fff", cursor: "pointer", textAlign: "left" as const };

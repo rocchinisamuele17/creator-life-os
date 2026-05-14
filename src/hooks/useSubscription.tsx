@@ -47,6 +47,7 @@ export function useSubscription() {
    INTERNAL HOOK
    ──────────────────────────────────────────── */
 function useSubscriptionInternal(): SubscriptionContextType {
+  const [user, setUser] = useState<any>(null);
   const [state, setState] = useState<SubscriptionState>({
     loading: true,
     plan: 'free',
@@ -64,8 +65,9 @@ function useSubscriptionInternal(): SubscriptionContextType {
         setState(s => ({ ...s, loading: false }));
         return;
       }
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
+      const { data: { user: u } } = await supabase.auth.getUser();
+      setUser(u);
+      if (!u) {
         setState(s => ({ ...s, loading: false, isPro: false }));
         return;
       }

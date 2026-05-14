@@ -320,23 +320,26 @@ export function Settings({ state, setState, showToast }: SettingsProps) {
               return (
                 <div 
                   key={i} 
+                  onClick={() => setSelectedDate(dateStr)}
                   style={{ 
-                    height: 46, 
-                    border: "1px solid #222", 
+                    height: 52, 
+                    border: selectedDate === dateStr ? "1px solid var(--accent-color)" : "1px solid #222", 
                     display: "flex", 
                     flexDirection: "column",
                     alignItems: "center", 
                     justifyContent: "center", 
                     fontSize: 12, 
-                    borderRadius: 4, 
-                    background: isToday ? "rgba(0, 240, 255, 0.1)" : "transparent", 
+                    borderRadius: 6, 
+                    background: isToday ? "rgba(0, 240, 255, 0.05)" : (selectedDate === dateStr ? "rgba(255,255,255,0.05)" : "transparent"), 
                     color: isToday ? "var(--accent-color)" : "#fff",
-                    position: "relative"
+                    position: "relative",
+                    cursor: "pointer",
+                    transition: "all 0.2s"
                   }}
                 >
-                  {d}
+                  <span style={{ fontWeight: isToday ? "bold" : "normal" }}>{d}</span>
                   {hasEvents && (
-                    <div style={{ display: "flex", gap: 2, marginTop: 2 }}>
+                    <div style={{ display: "flex", gap: 2, marginTop: 4 }}>
                       {eventsForDate[dateStr].slice(0, 3).map((ev, idx) => (
                         <div key={idx} style={{ width: 4, height: 4, borderRadius: "50%", background: ev.color || "var(--accent-color)" }} />
                       ))}
@@ -346,6 +349,27 @@ export function Settings({ state, setState, showToast }: SettingsProps) {
               );
             })}
           </div>
+
+          {/* Dettagli Giorno Selezionato */}
+          {selectedDate && (
+            <div style={{ background: "rgba(255,255,255,0.03)", borderRadius: 10, padding: 16, marginBottom: 24, border: "1px solid #222" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 12 }}>
+                <h4 style={{ fontSize: 13, color: "#888" }}>📅 {selectedDate}</h4>
+                {selectedEvents.length === 0 && <span style={{ fontSize: 12, color: "#555" }}>Nessun impegno</span>}
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                {selectedEvents.map((ev, idx) => (
+                  <div key={idx} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 12px", background: "#111", borderRadius: 8, borderLeft: `3px solid ${ev.color}` }}>
+                    <span style={{ fontSize: 16 }}>{ev.type === 'content' ? '🎬' : ev.type === 'brand' ? '🤝' : '📅'}</span>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: 13, fontWeight: "bold" }}>{ev.title || ev.brand}</div>
+                      <div style={{ fontSize: 11, color: "#666" }}>{ev.platform || ev.status} {ev.value ? `| €${ev.value}` : ''}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           <div style={{ borderTop: "1px solid #222", paddingTop: 20 }}>
             <h4 style={{ marginBottom: 12, fontSize: 14 }}>🔄 Sincronizzazione Esterna</h4>

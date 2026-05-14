@@ -120,9 +120,12 @@ function useSubscriptionInternal(): SubscriptionContextType {
       'full_journal',
     ];
 
+    const isAdmin = user?.email === "liveprodigi@gmail.com" || user?.email === "Rocchinisamuele17@gmail.com";
+    if (isAdmin) return true;
+
     if (!proFeatures.includes(feature)) return true;
     return state.isPro;
-  }, [state.isPro]);
+  }, [state.isPro, user?.email]);
 
   return {
     ...state,

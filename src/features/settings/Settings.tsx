@@ -254,9 +254,9 @@ export function Settings({ state, setState, showToast }: SettingsProps) {
               <span style={{ fontWeight: "bold", color: "var(--accent-color)" }}>Creator Life PRO</span>
               <span style={{ color: "#10b981", fontSize: 12 }}>ATTIVO</span>
             </div>
-            <button onClick={() => window.open('https://billing.stripe.com/p/login/test_91c7ub7Y4d5Cg924gg', '_blank')} style={{ width: "100%", padding: 12, background: "var(--accent-gradient)", border: "none", borderRadius: 8, fontWeight: "bold", cursor: "pointer" }}>Gestisci su Stripe</button>
+            <button onClick={() => window.open('https://billing.stripe.com/p/login/bpc_1TWyoF3ZeYXbOe1r8yBNhgQG', '_blank')} style={{ width: "100%", padding: 12, background: "var(--accent-gradient)", border: "none", borderRadius: 8, fontWeight: "bold", cursor: "pointer" }}>Gestisci su Stripe</button>
             <div style={{ marginTop: 20, textAlign: "center" }}>
-              <button onClick={() => window.open('https://billing.stripe.com/p/login/test_91c7ub7Y4d5Cg924gg', '_blank')} style={{ background: "none", border: "none", color: "#666", textDecoration: "underline", cursor: "pointer", fontSize: 12 }}>Annulla Abbonamento</button>
+              <button onClick={() => window.open('https://billing.stripe.com/p/login/bpc_1TWyoF3ZeYXbOe1r8yBNhgQG', '_blank')} style={{ background: "none", border: "none", color: "#666", textDecoration: "underline", cursor: "pointer", fontSize: 12 }}>Annulla Abbonamento</button>
             </div>
           </div>
         </div>

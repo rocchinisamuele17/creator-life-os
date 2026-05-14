@@ -33,8 +33,8 @@ export default async function handler(req: any, res: any) {
 
     const { prompt, context } = req.body;
 
-    // Chiamata a Gemini API (Versione Stabile)
-    const geminiResponse = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${geminiKey}`, {
+    // Chiamata a Gemini API (Modello gemini-pro, più stabile)
+    const geminiResponse = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${geminiKey}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

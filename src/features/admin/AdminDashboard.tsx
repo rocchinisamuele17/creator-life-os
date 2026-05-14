@@ -19,7 +19,8 @@ export function AdminDashboard() {
   useEffect(() => {
     async function fetchUsers() {
       if (!user) return;
-      if (user.email !== "liveprodigi@gmail.com") {
+      const isAdmin = user.email?.toLowerCase() === "liveprodigi@gmail.com" || user.email?.toLowerCase() === "rocchinisamuele17@gmail.com";
+      if (!isAdmin) {
         setLoading(false);
         return;
       }
@@ -59,7 +60,9 @@ export function AdminDashboard() {
     fetchUsers();
   }, [user, showToast]);
 
-  if (!user || user.email !== "liveprodigi@gmail.com") {
+  const isAdmin = user?.email?.toLowerCase() === "liveprodigi@gmail.com" || user?.email?.toLowerCase() === "rocchinisamuele17@gmail.com";
+
+  if (!user || !isAdmin) {
     return (
       <div style={{ textAlign: "center", padding: "100px 20px" }}>
         <h2 style={{ color: "#ef4444", fontSize: 24, marginBottom: 12 }}>Accesso Negato</h2>

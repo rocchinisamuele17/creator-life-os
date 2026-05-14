@@ -14,11 +14,12 @@ export default async function handler(req: any, res: any) {
     }
 
     const token = authHeader.replace('Bearer ', '');
-
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
     const groqKey = process.env.GROQ_API_KEY;
 
     if (!supabaseUrl || !supabaseAnonKey || !groqKey) {
-      return res.status(500).json({ error: 'Configurazione server incompleta (Supabase o Groq Key mancante).' });
+      return res.status(500).json({ error: 'Configurazione server incompleta (Supabase o Groq Key mancante). Controlla le variabili d\'ambiente.' });
     }
 
     // Auth con Supabase

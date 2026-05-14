@@ -379,7 +379,7 @@ export function Settings({ state, setState, showToast }: SettingsProps) {
             <div style={{ display: "flex", gap: 8 }}>
               <input 
                 readOnly 
-                value={user ? `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/calendar-feed?user_id=${user.id}&token=fe7c4a294b7264a1cae0eed24aa119ca50845bfbd1c37262c34e674cfae194c2` : "Accedi per vedere il link"}
+                value={user ? `https://vunlbtpajqizjlyujyqc.supabase.co/functions/v1/calendar-feed?user_id=${user.id}&token=fe7c4a294b7264a1cae0eed24aa119ca50845bfbd1c37262c34e674cfae194c2` : "Accedi per vedere il link"}
                 style={{ 
                   flex: 1, 
                   background: "#111", 

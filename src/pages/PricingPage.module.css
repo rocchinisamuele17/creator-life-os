@@ -40,10 +40,11 @@
 .navInner {
   max-width: 1100px;
   margin: 0 auto;
-  padding: 16px 24px;
+  padding: 12px 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  min-height: 64px;
 }
 
 .logo {
@@ -208,9 +209,9 @@
 
 .plansGrid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
-  align-items: start;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px;
+  align-items: stretch;
 }
 
 /* ── PLAN CARD ───────────────────────────── */
@@ -219,8 +220,10 @@
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 36px 28px;
-  transition: border-color 0.3s;
+  padding: 40px 32px;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .planCard:hover {
@@ -265,7 +268,8 @@
 
 /* ── PLAN HEADER ─────────────────────────── */
 .planHeader {
-  margin-bottom: 24px;
+  margin-bottom: 32px;
+  flex-shrink: 0;
 }
 
 .planName {
@@ -367,7 +371,8 @@
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
+  flex-grow: 1;
 }
 
 .featureList li {
@@ -652,11 +657,16 @@
   }
 
   .nav {
-    padding-top: max(env(safe-area-inset-top), 40px);
+    padding-top: max(env(safe-area-inset-top), 8px);
+  }
+
+  .navInner {
+    padding: 8px 16px;
+    min-height: 60px;
   }
 
   .navBack {
     font-size: 0.78rem;
-    padding: 6px 14px;
+    padding: 8px 16px;
   }
 }

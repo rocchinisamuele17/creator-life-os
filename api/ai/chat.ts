@@ -15,12 +15,10 @@ export default async function handler(req: any, res: any) {
 
     const token = authHeader.replace('Bearer ', '');
 
-    const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
-    const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
-    const geminiKey = process.env.GEMINI_API_KEY;
+    const groqKey = process.env.GROQ_API_KEY;
 
-    if (!supabaseUrl || !supabaseAnonKey || !geminiKey) {
-      return res.status(500).json({ error: 'Configurazione server incompleta (Supabase o Gemini Key mancante).' });
+    if (!supabaseUrl || !supabaseAnonKey || !groqKey) {
+      return res.status(500).json({ error: 'Configurazione server incompleta (Supabase o Groq Key mancante).' });
     }
 
     // Auth con Supabase
@@ -33,34 +31,41 @@ export default async function handler(req: any, res: any) {
 
     const { prompt, context } = req.body;
 
-    // Chiamata a Gemini API (Modello Gemini 2.0 Flash - Ultra Veloce)
-    const geminiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${geminiKey}`, {
+    // Chiamata a Groq API (Ultra Veloce)
+    const groqResponse = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${groqKey}`
+      },
       body: JSON.stringify({
-        contents: [{
-          parts: [{
-            text: `Sei l'assistente AI di Prodigi, un ecosistema per Content Creator. 
+        model: 'llama3-8b-8192',
+        messages: [
+          {
+            role: 'system',
+            content: `Sei l'assistente AI di Prodigi, un ecosistema per Content Creator. 
             Rispondi in modo professionale, creativo e conciso in italiano. 
-            Contesto dell'utente: ${JSON.stringify(context || {})}
-            Domanda dell'utente: ${prompt}`
-          }]
-        }]
+            Contesto dell'utente: ${JSON.stringify(context || {})}`
+          },
+          { role: 'user', content: prompt }
+        ],
+        max_tokens: 1024,
+        temperature: 0.7
       })
     });
 
-    const data = await geminiResponse.json();
+    const data = await groqResponse.json();
 
-    if (!geminiResponse.ok) {
-      return res.status(geminiResponse.status).json({
-        error: 'Errore Gemini',
-        details: data.error?.message || 'Errore durante la chiamata a Gemini'
+    if (!groqResponse.ok) {
+      return res.status(groqResponse.status).json({
+        error: 'Errore Groq',
+        details: data.error?.message || 'Errore durante la chiamata a Groq'
       });
     }
 
-    const aiText = data.candidates?.[0]?.content?.parts?.[0]?.text || "Non sono riuscito a generare una risposta.";
-
-    return res.status(200).json({ content: aiText });
+    return res.status(200).json({
+      content: data.choices[0].message.content
+    });
 
   } catch (error: any) {
     console.error('AI Error:', error);

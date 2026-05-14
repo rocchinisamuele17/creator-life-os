@@ -33,25 +33,19 @@ export default async function handler(req: any, res: any) {
 
     const { prompt, context } = req.body;
 
-    // Chiamata a Gemini API
-    const geminiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`, {
+    // Chiamata a Gemini API (Versione Stabile)
+    const geminiResponse = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${geminiKey}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         contents: [{
           parts: [{
             text: `Sei l'assistente AI di Prodigi, un ecosistema per Content Creator. 
-            Rispondi in modo professionale, creativo e conciso. 
+            Rispondi in modo professionale, creativo e conciso in italiano. 
             Contesto dell'utente: ${JSON.stringify(context || {})}
             Domanda dell'utente: ${prompt}`
           }]
-        }],
-        generationConfig: {
-          temperature: 0.7,
-          topK: 40,
-          topP: 0.95,
-          maxOutputTokens: 1024,
-        }
+        }]
       })
     });
 

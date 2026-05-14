@@ -122,7 +122,7 @@ function useSubscriptionInternal(): SubscriptionContextType {
       'full_journal',
     ];
 
-    const isAdmin = user?.email === "liveprodigi@gmail.com" || user?.email === "Rocchinisamuele17@gmail.com";
+    const isAdmin = user?.email?.toLowerCase() === "liveprodigi@gmail.com" || user?.email?.toLowerCase() === "rocchinisamuele17@gmail.com";
     if (isAdmin) return true;
 
     if (!proFeatures.includes(feature)) return true;

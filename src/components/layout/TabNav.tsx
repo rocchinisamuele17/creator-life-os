@@ -14,7 +14,7 @@ interface TabNavProps {
 
 export function TabNav({ active, onChange }: TabNavProps) {
   const { user } = useAuth();
-  const isAdmin = user?.email === "liveprodigi@gmail.com" || user?.email === "Rocchinisamuele17@gmail.com";
+  const isAdmin = user?.email?.toLowerCase() === "liveprodigi@gmail.com" || user?.email?.toLowerCase() === "rocchinisamuele17@gmail.com";
 
   const TABS: Tab[] = [
     { id: "dashboard", label: "🏠 Dashboard" },

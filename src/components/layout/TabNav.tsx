@@ -1,4 +1,6 @@
 import { useAuth } from "../../context/AuthContext";
+import { isAdmin as checkIsAdmin } from "../../lib/admin";
+
 
 export type TabId = "dashboard" | "content" | "ai" | "money" | "life" | "brands" | "preview" | "settings" | "admin";
 
@@ -14,7 +16,8 @@ interface TabNavProps {
 
 export function TabNav({ active, onChange }: TabNavProps) {
   const { user } = useAuth();
-  const isAdmin = user?.email?.toLowerCase() === "liveprodigi@gmail.com" || user?.email?.toLowerCase() === "rocchinisamuele17@gmail.com";
+  const isAdmin = checkIsAdmin(user?.email);
+
 
   const TABS: Tab[] = [
     { id: "dashboard", label: "🏠 Dashboard" },

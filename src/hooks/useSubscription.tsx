@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useCallback, createContext, useContext } from 'react';
 import { supabase } from '../lib/supabase';
+import { isAdmin as checkIsAdmin } from '../lib/admin';
+
 
 /* ────────────────────────────────────────────
    TYPES
@@ -122,7 +124,8 @@ function useSubscriptionInternal(): SubscriptionContextType {
       'full_journal',
     ];
 
-    const isAdmin = user?.email?.toLowerCase() === "liveprodigi@gmail.com" || user?.email?.toLowerCase() === "rocchinisamuele17@gmail.com";
+    const isAdmin = checkIsAdmin(user?.email);
+
     if (isAdmin) return true;
 
     if (!proFeatures.includes(feature)) return true;

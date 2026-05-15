@@ -35,7 +35,8 @@ export default async function handler(req: Request) {
   }
 
   // 2. Check if the requester is the admin
-  if (user.email !== 'liveprodigi@gmail.com') {
+  const adminEmails = ['liveprodigi@gmail.com', 'rocchinisamuele17@gmail.com'];
+  if (!user.email || !adminEmails.includes(user.email.toLowerCase().trim())) {
     return new Response(JSON.stringify({ error: 'Forbidden: You are not the admin' }), { status: 403 });
   }
 

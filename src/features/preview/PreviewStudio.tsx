@@ -318,38 +318,159 @@ export function PreviewStudio() {
 
             {platform === "tiktok" && (
               <div style={{ flex: 1, display: "flex", flexDirection: "column", background: "#000", color: "#fff", position: "relative" }}>
-                 {renderMedia({ opacity: 0.8 })}
-                 {/* UI Overlay */}
-                 <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: 20, background: "linear-gradient(transparent, rgba(0,0,0,0.8))" }}>
-                    <div style={{ fontWeight: 600, fontSize: 16, marginBottom: 8 }}>@{username}</div>
-                    <div style={{ fontSize: 14, marginBottom: 16 }}>{caption}</div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12 }}>
-                      🎵 Suono originale - {username}
+                 {renderMedia({})}
+                 
+                 {/* UI Overlay - Bottom Text */}
+                 <div style={{ 
+                   position: "absolute", 
+                   bottom: 0, 
+                   left: 0, 
+                   right: 0, 
+                   padding: "80px 16px 40px", 
+                   background: "linear-gradient(transparent, rgba(0,0,0,0.6) 40%, rgba(0,0,0,0.9))",
+                   pointerEvents: "none"
+                 }}>
+                    <div style={{ fontWeight: 700, fontSize: 17, marginBottom: 8, display: "flex", alignItems: "center", gap: 4 }}>
+                      @{username} <span style={{ width: 14, height: 14, background: "#20D5EC", borderRadius: "50%", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 8 }}>✓</span>
+                    </div>
+                    <div style={{ 
+                      fontSize: 15, 
+                      lineHeight: "1.4",
+                      marginBottom: 16, 
+                      display: "-webkit-box",
+                      WebkitLineClamp: 3,
+                      WebkitBoxOrient: "vertical",
+                      overflow: "hidden",
+                      textShadow: "0 1px 2px rgba(0,0,0,0.5)"
+                    }}>
+                      {caption}
+                    </div>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13 }}>
+                      <span style={{ fontSize: 18 }}>♫</span> 
+                      <div style={{ overflow: "hidden", whiteSpace: "nowrap" }}>
+                        <div style={{ display: "inline-block", paddingLeft: "100%", animation: "marquee 10s linear infinite" }}>
+                          Suono originale - {username} - {username}
+                        </div>
+                      </div>
                     </div>
                  </div>
-                 {/* Right sidebar */}
-                 <div style={{ position: "absolute", right: 10, bottom: 80, display: "flex", flexDirection: "column", gap: 20, alignItems: "center", fontSize: 24 }}>
-                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}><span>❤️</span><span style={{fontSize: 12}}>12k</span></div>
-                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}><span>💬</span><span style={{fontSize: 12}}>342</span></div>
-                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}><span>🔖</span><span style={{fontSize: 12}}>50</span></div>
-                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}><span>⤴️</span><span style={{fontSize: 12}}>21</span></div>
+
+                 {/* Right sidebar - Icons */}
+                 <div style={{ 
+                   position: "absolute", 
+                   right: 8, 
+                   bottom: 100, 
+                   display: "flex", 
+                   flexDirection: "column", 
+                   gap: 20, 
+                   alignItems: "center",
+                   zIndex: 2
+                 }}>
+                    {/* Profile Icon */}
+                    <div style={{ position: "relative", marginBottom: 10 }}>
+                      <div style={{ width: 48, height: 48, borderRadius: "50%", border: "2px solid #fff", background: "var(--accent-gradient)", overflow: "hidden" }}>
+                        <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${username}`} alt="avatar" />
+                      </div>
+                      <div style={{ position: "absolute", bottom: -8, left: "50%", transform: "translateX(-50%)", background: "#fe2c55", borderRadius: "50%", width: 20, height: 20, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontWeight: "bold" }}>+</div>
+                    </div>
+
+                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                      <span style={{ fontSize: 32, filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.3))" }}>❤️</span>
+                      <span style={{ fontSize: 12, fontWeight: 600 }}>124.5k</span>
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                      <span style={{ fontSize: 32, filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.3))" }}>💬</span>
+                      <span style={{ fontSize: 12, fontWeight: 600 }}>1,234</span>
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                      <span style={{ fontSize: 32, filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.3))" }}>🔖</span>
+                      <span style={{ fontSize: 12, fontWeight: 600 }}>45.2k</span>
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                      <span style={{ fontSize: 32, filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.3))" }}>⤴️</span>
+                      <span style={{ fontSize: 12, fontWeight: 600 }}>Share</span>
+                    </div>
+
+                    {/* Vinyl Record */}
+                    <div style={{ 
+                      width: 40, 
+                      height: 40, 
+                      background: "linear-gradient(45deg, #222, #444, #222)", 
+                      borderRadius: "50%", 
+                      border: "8px solid #333",
+                      animation: "rotate 4s linear infinite",
+                      marginTop: 10
+                    }}></div>
                  </div>
               </div>
             )}
 
             {platform === "youtube" && (
-              <div style={{ flex: 1, display: "flex", flexDirection: "column", background: "#0f0f0f", color: "#fff", paddingTop: 40 }}>
-                {/* Video Area */}
-                <div style={{ width: "100%", height: 200, background: "#000", position: "relative" }}>
+              <div style={{ flex: 1, display: "flex", flexDirection: "column", background: "#0f0f0f", color: "#fff" }}>
+                {/* Status Bar space */}
+                <div style={{ height: 40 }}></div>
+
+                {/* Video Player Area */}
+                <div style={{ width: "100%", height: 210, background: "#000", position: "relative" }}>
                   {renderMedia({})}
-                  <div style={{ position: "absolute", bottom: 8, right: 8, background: "rgba(0,0,0,0.8)", padding: "2px 6px", borderRadius: 4, fontSize: 12 }}>12:04</div>
+                  <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 3, background: "rgba(255,255,255,0.2)" }}>
+                    <div style={{ width: "40%", height: "100%", background: "#f00" }}></div>
+                  </div>
                 </div>
-                {/* Meta */}
-                <div style={{ padding: 12, display: "flex", gap: 12 }}>
-                  <div style={{ width: 40, height: 40, borderRadius: "50%", background: "var(--accent-gradient)", flexShrink: 0 }}></div>
-                  <div>
-                    <div style={{ fontWeight: 600, fontSize: 16, marginBottom: 4, lineHeight: 1.2 }}>{caption.length > 50 ? caption.substring(0, 50) + "..." : caption}</div>
-                    <div style={{ fontSize: 12, color: "#aaa" }}>{username} • 14k visualizzazioni • 2 ore fa</div>
+
+                {/* Video Info */}
+                <div style={{ padding: "16px 12px" }}>
+                  <h1 style={{ fontSize: 18, fontWeight: 700, lineHeight: "1.3", marginBottom: 8 }}>
+                    {aiContext || "Il mio nuovo video epico"}
+                  </h1>
+                  <div style={{ fontSize: 13, color: "#aaa", marginBottom: 16 }}>
+                    1.2M visualizzazioni • 2 ore fa • #trending
+                  </div>
+
+                  {/* Channel Row */}
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
+                    <div style={{ width: 36, height: 36, borderRadius: "50%", background: "var(--accent-gradient)", overflow: "hidden" }}>
+                      <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${username}`} alt="avatar" />
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: 15, fontWeight: 600 }}>{username}</div>
+                      <div style={{ fontSize: 12, color: "#aaa" }}>1.5M iscritti</div>
+                    </div>
+                    <button style={{ background: "#fff", color: "#000", border: "none", borderRadius: 18, padding: "8px 16px", fontSize: 13, fontWeight: 600 }}>
+                      Iscriviti
+                    </button>
+                  </div>
+
+                  {/* Action Buttons Scroll */}
+                  <div style={{ display: "flex", gap: 8, overflowX: "auto", paddingBottom: 10, marginBottom: 16 }} className="no-scrollbar">
+                    <div style={{ background: "rgba(255,255,255,0.1)", padding: "8px 14px", borderRadius: 18, fontSize: 13, whiteSpace: "nowrap", display: "flex", gap: 6 }}>
+                      <span>👍 12k</span> | <span>👎</span>
+                    </div>
+                    <div style={{ background: "rgba(255,255,255,0.1)", padding: "8px 14px", borderRadius: 18, fontSize: 13, whiteSpace: "nowrap" }}>
+                      ➡️ Condividi
+                    </div>
+                    <div style={{ background: "rgba(255,255,255,0.1)", padding: "8px 14px", borderRadius: 18, fontSize: 13, whiteSpace: "nowrap" }}>
+                      📥 Scarica
+                    </div>
+                  </div>
+
+                  {/* Description Box */}
+                  <div style={{ background: "rgba(255,255,255,0.1)", borderRadius: 12, padding: 12 }}>
+                    <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 4 }}>Descrizione</div>
+                    <div style={{ fontSize: 13, color: "#eee", lineHeight: "1.4" }}>
+                      {caption.length > 100 ? caption.substring(0, 100) + "..." : caption}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Comments Mockup */}
+                <div style={{ padding: "0 12px", borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: 16 }}>
+                  <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 12 }}>Commenti • 432</div>
+                  <div style={{ display: "flex", gap: 10 }}>
+                    <div style={{ width: 24, height: 24, borderRadius: "50%", background: "#444" }}></div>
+                    <div style={{ flex: 1, background: "rgba(255,255,255,0.05)", borderRadius: 8, padding: 8, fontSize: 12, color: "#aaa" }}>
+                      Aggiungi un commento...
+                    </div>
                   </div>
                 </div>
               </div>
